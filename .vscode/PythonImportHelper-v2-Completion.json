@@ -27,12 +27,21 @@
         "documentation": {}
     },
     {
-        "label": "matplotlib",
+        "label": "matplotlib.pyplot",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "matplotlib",
-        "description": "matplotlib",
-        "detail": "matplotlib",
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "random_state=4",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def random_state=42\n# Prepared data before KNN\ndef process_dataset():\n    # read CSV file\n    wdbc_file = pd.read_csv('wdbc.csv', header=None)\n    # convert DataFrame to NumPy array\n    wdbc_numpy = wdbc_file.to_numpy()\n    # min-max normalization using NumPy = (x-min)/(max-min)\n    # for last column, min = 0 & max =1 -> value is just itself\n    normalized_numpy = (wdbc_numpy - np.min(wdbc_numpy, axis=0)) / (np.max(wdbc_numpy, axis=0) - np.min(wdbc_numpy, axis=0))",
+        "detail": "test1",
         "documentation": {}
     },
     {
@@ -49,7 +58,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def euclidean_formula(x1,x2):\n    euclidean_distance = np.sqrt(np.sum(x1-x2)**2)\n    return euclidean_distance\n# check majority\ndef majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  \n    count_0 = list.value_counts().get(0, 0) \n    #betwen 1 and 0 which one is more\n    if count_1 > count_0:",
+        "peekOfCode": "def euclidean_formula(x1,x2):\n    # follow eucliean distance formula\n    euclidean_distance = np.sqrt(np.sum(x1-x2)**2)\n    return euclidean_distance\n# check majority\ndef majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  \n    count_0 = list.value_counts().get(0, 0) \n    #betwen 1 and 0 which one is more",
         "detail": "test1",
         "documentation": {}
     },
@@ -67,7 +76,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def euclidean_matrix(train_data):\n    train_euclidean=np.zeros((len(train_data),len(train_data)))\n    for i in range(len(train_data)):\n        for j in range(len(train_data)):\n            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], train_data.iloc[j])\n    train_euclidean=pd.DataFrame(train_euclidean)\n    train_euclidean.to_excel(\"train_eculidean.xlsx\")\n    return train_euclidean\n# Insert predicted list in the original dataset at the last column\ndef insert_predicted(predicted_list, train_data):",
+        "peekOfCode": "def euclidean_matrix(train_data):\n    # make numpy matrix\n    train_euclidean=np.zeros((len(train_data),len(train_data)))\n    # apply euclidean formula\n    for i in range(len(train_data)):\n        for j in range(len(train_data)):\n            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], train_data.iloc[j])\n    train_euclidean=pd.DataFrame(train_euclidean)\n    train_euclidean.to_excel(\"train_euclidean.xlsx\")\n    # message",
         "detail": "test1",
         "documentation": {}
     },
@@ -76,7 +85,16 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def insert_predicted(predicted_list, train_data):\n    train_data.loc[-1]=predicted_list\n    return train_data\n# KNN algorithm using Euclidian Matrix\ndef knn_algorithm(k, train_euclidean, train_data):\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj",
+        "peekOfCode": "def insert_predicted(predicted_list, train_data):\n    train_data.loc[-1]=predicted_list\n    return train_data\n# Accuracy in Training and Testing\ndef calculate_accuracy(actual_list, predicted_list, train_data):\n    # compare two column. matched->1, mismatched->0\n    compared_result = list((actual_list == predicted_list).astype(int))\n    # calculate accuracy\n    accuracy=(sum(compared_result)/len(compared_result))   \n    # return accuracy value",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_accuracy",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def calculate_accuracy(actual_list, predicted_list, train_data):\n    # compare two column. matched->1, mismatched->0\n    compared_result = list((actual_list == predicted_list).astype(int))\n    # calculate accuracy\n    accuracy=(sum(compared_result)/len(compared_result))   \n    # return accuracy value\n    return accuracy\n# KNN algorithm using Euclidian Matrix\ndef knn_algorithm(k, train_euclidean, train_data):\n    # make empty dataframe",
         "detail": "test1",
         "documentation": {}
     },
@@ -85,25 +103,16 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def knn_algorithm(k, train_euclidean, train_data):\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj\n            k_smallest_column=train_euclidean.loc[j].nsmallest(k)\n            # get the index list from smallest_column\n            smallest_index_list=k_smallest_column.index.tolist()\n            # depends on k, cut off list",
+        "peekOfCode": "def knn_algorithm(k, train_euclidean, train_data):\n    # make empty dataframe\n    knn_trained_data=pd.DataFrame(train_data)\n    accuracy_table=pd.DataFrame()\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj\n            k_smallest_column=train_euclidean.loc[j].nsmallest(k)",
         "detail": "test1",
         "documentation": {}
     },
     {
-        "label": "accuracy_matrix",
+        "label": "graph_accuracy",
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def accuracy_matrix():\n    ret\n# Graph created with k\ndef graph_knn():\n    return 0\n# main function - united all function ahead\ndef main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)",
-        "detail": "test1",
-        "documentation": {}
-    },
-    {
-        "label": "graph_knn",
-        "kind": 2,
-        "importPath": "test1",
-        "description": "test1",
-        "peekOfCode": "def graph_knn():\n    return 0\n# main function - united all function ahead\ndef main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def graph_accuracy(accuracy_table, title):\n    # plot the data\n    plt.figure(figsize=(10, 5))\n    plt.plot(accuracy_table)\n    # formatting \n    plt.xlabel(\"Value of k\")\n    plt.ylabel(\"Accuracy over \"+title)\n    plt.savefig(title+\".png\",dpi=300, bbox_inches='tight')\n    # message\n    \"save graph image file to the folder\"",
         "detail": "test1",
         "documentation": {}
     },
@@ -112,7 +121,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    accuracy_table=knn_algorithm(51, train_euclidean, train_data)\n    graph_accuracy(accuracy_table, \"training data\")\n    # message\n    \"hw1 is done\"\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
         "detail": "test1",
         "documentation": {}
     }
