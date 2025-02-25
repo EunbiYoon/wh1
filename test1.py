@@ -3,7 +3,6 @@ import numpy as np
 import sklearn as sk
 import matplotlib.pyplot as plt
 
-def random_state=42
 
 # Prepared data before KNN
 def process_dataset():
@@ -98,42 +97,44 @@ def knn_algorithm(k, train_euclidean, train_data):
     knn_trained_data=pd.DataFrame(train_data)
     accuracy_table=pd.DataFrame()
 
-    # Iterate over k values : 1~51 odd number
-    for i in range(1,k+1,2): 
-        # j is for data instances 
-        for j in range(len(train_euclidean)):
-            # find smallest components count:k for xj
-            k_smallest_column=train_euclidean.loc[j].nsmallest(k)
+    # Iterate 20 times for each k
+    for n in range(20):
+        # Iterate over k values : 1~51 odd number
+        for i in range(1,k+1,2): 
+            # j is for data instances 
+            for j in range(len(train_euclidean)):
+                # find smallest components count:k for xj
+                k_smallest_column=train_euclidean.loc[j].nsmallest(k)
 
-            # get the index list from smallest_column
-            smallest_index_list=k_smallest_column.index.tolist()
+                # get the index list from smallest_column
+                smallest_index_list=k_smallest_column.index.tolist()
 
-            # depends on k, cut off list
-            smallest_index_cutoff=smallest_index_list[:i+1]
+                # depends on k, cut off list
+                smallest_index_cutoff=smallest_index_list[:i+1]
 
-            # get train_data which has index as smallest_index_list
-            train_smallest=train_data.loc[smallest_index_cutoff]
+                # get train_data which has index as smallest_index_list
+                train_smallest=train_data.loc[smallest_index_cutoff]
 
-            # get the last column from smallest_index_cutoff
-            train_last=train_smallest[len(train_data.columns)-1]
+                # get the last column from smallest_index_cutoff
+                train_last=train_smallest[len(train_data.columns)-1]
 
-            # check majority 
-            final_predicted_value=majority_formula(train_last)
+                # check majority 
+                final_predicted_value=majority_formula(train_last)
 
-            # merge final_predicted_value to train_data
-            knn_trained_data.at[j,"k="+str(i)]=final_predicted_value
+                # merge final_predicted_value to train_data
+                knn_trained_data.at[j,"k="+str(i)]=final_predicted_value
 
-            # message
-            print(f"knn algorithm : k={i} , train_instance={j}")
-        
-        # calcualte accuracy depending on k and make accuracy_table
-        accuracy_value=calculate_accuracy(knn_trained_data[len(train_data.columns)-1], knn_trained_data["k="+str(i)], knn_trained_data)
-        accuracy_table.at[i,"accuracy"]=accuracy_value
+                # message
+                print(f"knn algorithm : k={i} , train_instance={j}")
+            
+            # calcualte accuracy depending on k and make accuracy_table
+            accuracy_value=calculate_accuracy(knn_trained_data[len(train_data.columns)-1], knn_trained_data["k="+str(i)], knn_trained_data)
+            accuracy_table.at[i,"accuracy"]=accuracy_value
 
-    # Save the DataFrame once after all iterations
-    knn_trained_data.to_excel("knn_algorithm.xlsx")
-    accuracy_table.to_excel("accuracy_table.xlsx")
-    return accuracy_table 
+        # Save the DataFrame once after all iterations
+        knn_trained_data.to_excel("knn_algorithm.xlsx")
+        accuracy_table.to_excel("accuracy_table.xlsx")
+        return accuracy_table 
 
 # Graph created with k
 def graph_accuracy(accuracy_table, title):
@@ -147,7 +148,7 @@ def graph_accuracy(accuracy_table, title):
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
 
     # message
-    "save graph image file to the folder"
+    print("save graph image file to the folder")
 
 # main function - united all function ahead
 def main():
@@ -156,7 +157,7 @@ def main():
     accuracy_table=knn_algorithm(51, train_euclidean, train_data)
     graph_accuracy(accuracy_table, "training data")
     # message
-    "hw1 is done"
+    print("hw1 is done")
 
 # ensures that the main function is executed only
 if __name__ == "__main__":
