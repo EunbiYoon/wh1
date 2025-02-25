@@ -1,23 +1,21 @@
 import pandas as pd
 import numpy as np
-import csv
+import openpyxl
 
+# read CSV file
+wdbc_file = pd.read_csv('wdbc.csv', header=None)
+wdbc_file.to_excel("original.xlsx")
 
-# open & read csv file
-wdbc_file = csv.reader(open('wdbc.csv', mode='r', newline=''))
+# Convert DataFrame to NumPy array
+wdbc_numpy = wdbc_file.to_numpy()
 
-# first column 
-for row in wdbc_file:
-    print(row[0])
+# Min-max normalization using NumPy
+normalized_numpy = (wdbc_numpy - np.min(wdbc_numpy, axis=0)) / (np.max(wdbc_numpy, axis=0) - np.min(wdbc_numpy, axis=0))
 
-# normalize the dataset 
-# normalize = (x-mean)/std
-for i in range(len(wdbc_file.columns)):
-    data=np.array(wdbc_file.iloc[i])
-    print("data")
-    print(data)
-    print("/")
-    mean=np.mean(data)
-    std=np.std(data)
-    normalized_datas=(data-mean)/std
-    print(normalized_datas)
+# change normalized data to pandas dataframe
+normalized_df = pd.DataFrame(normalized_numpy, columns=wdbc_file.columns)
+
+# end of column is follow with original one
+start_data = pd.concat([normalized_df, pd.DataFrame([wdbc_file.iloc[-1]], columns=wdbc_file.columns)], ignore_index=True)
+
+start_data.to_excel("new.xlsx")
