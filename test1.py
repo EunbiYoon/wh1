@@ -31,10 +31,6 @@ def process_dataset():
     train_data=train_data.reset_index(drop=True)
     test_data=test_data.reset_index(drop=True)
     
-    # save result as excel
-    train_data.to_excel('train_data.xlsx')
-    test_data.to_excel('test_data.xlsx')
-
     # message
     print("Normalized and Shuffling are done. Split train_data and test_data. Please wait...")
 
@@ -59,28 +55,23 @@ def majority_formula(list):
         return 0
 
 # Calculate Euclidean Distane in train_data
-def euclidean_matrix(train_data):
+def euclidean_matrix(train_data, test_data):
     # make numpy matrix
-    train_euclidean=np.zeros((len(train_data),len(train_data)))
+    train_euclidean=np.zeros((len(train_data),len(test_data)))
 
     # apply euclidean formula
     for i in range(len(train_data)):
-        for j in range(len(train_data)):
-            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], train_data.iloc[j])
+        for j in range(len(test_data)):
+            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], test_data.iloc[j])
     train_euclidean=pd.DataFrame(train_euclidean)
-    train_euclidean.to_excel("train_euclidean.xlsx")
 
     # message
     print("Euclidean matrix has been created")
     return train_euclidean
 
-# Insert predicted list in the original dataset at the last column
-def insert_predicted(predicted_list, train_data):
-    train_data.loc[-1]=predicted_list
-    return train_data
 
 # Accuracy in Training and Testing
-def calculate_accuracy(actual_list, predicted_list, train_data):
+def calculate_accuracy(actual_list, predicted_list):
     # compare two column. matched->1, mismatched->0
     compared_result = list((actual_list == predicted_list).astype(int))
     
@@ -92,49 +83,53 @@ def calculate_accuracy(actual_list, predicted_list, train_data):
 
                                         
 # KNN algorithm using Euclidian Matrix
-def knn_algorithm(k, train_euclidean, train_data):
+def knn_algorithm(k, train_euclidean, data, data_info, try_count):
     # make empty dataframe
-    knn_trained_data=pd.DataFrame(train_data)
-    accuracy_table=pd.DataFrame()
+    knn_data=pd.DataFrame(data)
+    knn_accuracy=pd.DataFrame()
 
-    # Iterate 20 times for each k
-    for n in range(20):
-        # Iterate over k values : 1~51 odd number
-        for i in range(1,k+1,2): 
-            # j is for data instances 
-            for j in range(len(train_euclidean)):
-                # find smallest components count:k for xj
-                k_smallest_column=train_euclidean.loc[j].nsmallest(k)
+    # Iterate over k values : 1~51 odd number
+    for i in range(1,k+1,2): 
+        # j is for data instances 
+        for j in range(len(train_euclidean)):
+            # find smallest components count:k for xj
+            k_smallest_column=train_euclidean.loc[j].nsmallest(k)
 
-                # get the index list from smallest_column
-                smallest_index_list=k_smallest_column.index.tolist()
+            # get the index list from smallest_column
+            smallest_index_list=k_smallest_column.index.tolist()
 
-                # depends on k, cut off list
-                smallest_index_cutoff=smallest_index_list[:i+1]
+            # depends on k, cut off list
+            smallest_index_cutoff=smallest_index_list[:i+1]
 
-                # get train_data which has index as smallest_index_list
-                train_smallest=train_data.loc[smallest_index_cutoff]
+            # get train_data which has index as smallest_index_list
+            train_smallest=data.loc[smallest_index_cutoff]
 
-                # get the last column from smallest_index_cutoff
-                train_last=train_smallest[len(train_data.columns)-1]
+            # get the last column from smallest_index_cutoff
+            train_last=train_smallest[len(data.columns)-1]
 
-                # check majority 
-                final_predicted_value=majority_formula(train_last)
+            # check majority 
+            final_predicted_value=majority_formula(train_last)
 
-                # merge final_predicted_value to train_data
-                knn_trained_data.at[j,"k="+str(i)]=final_predicted_value
+            # merge final_predicted_value to train_data
+            knn_data.at[j,"k="+str(i)]=final_predicted_value
 
-                # message
-                print(f"knn algorithm : k={i} , train_instance={j}")
-            
-            # calcualte accuracy depending on k and make accuracy_table
-            accuracy_value=calculate_accuracy(knn_trained_data[len(train_data.columns)-1], knn_trained_data["k="+str(i)], knn_trained_data)
-            accuracy_table.at[i,"accuracy"]=accuracy_value
+            # message
+            print(f"knn algorithm : data_type={data_info} , try={try_count+1} , k={i} , instance_number={j}")
+        
+        # calcualte accuracy depending on k and make accuracy_list
+        accuracy_value=calculate_accuracy(knn_data[len(data.columns)-1], knn_data["k="+str(i)])
+        knn_accuracy.at[i,"accuracy"]=accuracy_value
 
-        # Save the DataFrame once after all iterations
-        knn_trained_data.to_excel("knn_algorithm.xlsx")
-        accuracy_table.to_excel("accuracy_table.xlsx")
-        return accuracy_table 
+    return knn_accuracy 
+
+
+# calculate average and standard deviation of accuracy
+def accuracy_avg_std(accuracy_table):
+    accuracy_table["Mean"]=accuracy_table.mean(axis=1)
+    accuracy_table["Std"]=accuracy_table.std(axis=1)
+    print(accuracy_table)
+
+
 
 # Graph created with k
 def graph_accuracy(accuracy_table, title):
@@ -152,12 +147,43 @@ def graph_accuracy(accuracy_table, title):
 
 # main function - united all function ahead
 def main():
-    train_data, test_data=process_dataset()
-    train_euclidean=euclidean_matrix(train_data)
-    accuracy_table=knn_algorithm(51, train_euclidean, train_data)
-    graph_accuracy(accuracy_table, "training data")
+    accuracy_train=pd.DataFrame()
+    accuracy_test=pd.DataFrame()
+    # iterate 20 times 
+    for try_count in range(2):
+        print("================================================================================")
+        print(f"[[ try = {try_count+1} ]]")
+        # preprocess dataset
+        train_data, test_data=process_dataset()
+
+        # train_data
+        train_euclidean=euclidean_matrix(train_data, train_data)
+        train_knn=knn_algorithm(51, train_euclidean, train_data,"train",try_count)
+        accuracy_train["try="+str(try_count)]=train_knn
+
+        # train_data -> excel
+        train_data.to_excel('train_data.xlsx')
+        train_euclidean.to_excel("train_eucliean.xlsx")
+        train_knn.to_excel("train_knn.xlsx")
+        accuracy_train.to_excel("accuracy_train.xlsx")
+
+        # test_data
+        test_euclidean=euclidean_matrix(train_data,test_data)
+        test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
+        accuracy_test["try="+str(try_count)]=test_knn
+
+        # test_data -> excel
+        test_data.to_excel('test_data.xlsx')
+        test_euclidean.to_excel("test_eucliean.xlsx")
+        test_knn.to_excel("test_knn.xlsx")
+        accuracy_test.to_excel("accuracy_test.xlsx")
+    
+    accuracy_train.to_excel("accuracy_train.xlsx")
+    accuracy_train.to_excel("accuracy_test.xlsx")
+    # make graph
+    # graph_accuracy(accuracy_table, "training data")
     # message
-    print("hw1 is done")
+    print("[[ Complete task! ]]\n")
 
 # ensures that the main function is executed only
 if __name__ == "__main__":

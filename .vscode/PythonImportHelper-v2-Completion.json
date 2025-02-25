@@ -67,16 +67,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def euclidean_matrix(train_data):\n    # make numpy matrix\n    train_euclidean=np.zeros((len(train_data),len(train_data)))\n    # apply euclidean formula\n    for i in range(len(train_data)):\n        for j in range(len(train_data)):\n            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], train_data.iloc[j])\n    train_euclidean=pd.DataFrame(train_euclidean)\n    train_euclidean.to_excel(\"train_euclidean.xlsx\")\n    # message",
-        "detail": "test1",
-        "documentation": {}
-    },
-    {
-        "label": "insert_predicted",
-        "kind": 2,
-        "importPath": "test1",
-        "description": "test1",
-        "peekOfCode": "def insert_predicted(predicted_list, train_data):\n    train_data.loc[-1]=predicted_list\n    return train_data\n# Accuracy in Training and Testing\ndef calculate_accuracy(actual_list, predicted_list, train_data):\n    # compare two column. matched->1, mismatched->0\n    compared_result = list((actual_list == predicted_list).astype(int))\n    # calculate accuracy\n    accuracy=(sum(compared_result)/len(compared_result))   \n    # return accuracy value",
+        "peekOfCode": "def euclidean_matrix(train_data, test_data):\n    # make numpy matrix\n    train_euclidean=np.zeros((len(train_data),len(test_data)))\n    # apply euclidean formula\n    for i in range(len(train_data)):\n        for j in range(len(test_data)):\n            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], test_data.iloc[j])\n    train_euclidean=pd.DataFrame(train_euclidean)\n    # message\n    print(\"Euclidean matrix has been created\")",
         "detail": "test1",
         "documentation": {}
     },
@@ -85,7 +76,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def calculate_accuracy(actual_list, predicted_list, train_data):\n    # compare two column. matched->1, mismatched->0\n    compared_result = list((actual_list == predicted_list).astype(int))\n    # calculate accuracy\n    accuracy=(sum(compared_result)/len(compared_result))   \n    # return accuracy value\n    return accuracy\n# KNN algorithm using Euclidian Matrix\ndef knn_algorithm(k, train_euclidean, train_data):\n    # make empty dataframe",
+        "peekOfCode": "def calculate_accuracy(actual_list, predicted_list):\n    # compare two column. matched->1, mismatched->0\n    compared_result = list((actual_list == predicted_list).astype(int))\n    # calculate accuracy\n    accuracy=(sum(compared_result)/len(compared_result))   \n    # return accuracy value\n    return accuracy\n# KNN algorithm using Euclidian Matrix\ndef knn_algorithm(k, train_euclidean, data, data_info, try_count):\n    # make empty dataframe",
         "detail": "test1",
         "documentation": {}
     },
@@ -94,7 +85,16 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def knn_algorithm(k, train_euclidean, train_data):\n    # make empty dataframe\n    knn_trained_data=pd.DataFrame(train_data)\n    accuracy_table=pd.DataFrame()\n    # Iterate 20 times for each k\n    for n in range(20):\n        # Iterate over k values : 1~51 odd number\n        for i in range(1,k+1,2): \n            # j is for data instances \n            for j in range(len(train_euclidean)):",
+        "peekOfCode": "def knn_algorithm(k, train_euclidean, data, data_info, try_count):\n    # make empty dataframe\n    knn_data=pd.DataFrame(data)\n    knn_accuracy=pd.DataFrame()\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj\n            k_smallest_column=train_euclidean.loc[j].nsmallest(k)",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "accuracy_avg_std",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def accuracy_avg_std(accuracy_table):\n    accuracy_table[\"Mean\"]=accuracy_table.mean(axis=1)\n    accuracy_table[\"Std\"]=accuracy_table.std(axis=1)\n    print(accuracy_table)\n# Graph created with k\ndef graph_accuracy(accuracy_table, title):\n    # plot the data\n    plt.figure(figsize=(10, 5))\n    plt.plot(accuracy_table)\n    # formatting ",
         "detail": "test1",
         "documentation": {}
     },
@@ -112,7 +112,7 @@
         "kind": 2,
         "importPath": "test1",
         "description": "test1",
-        "peekOfCode": "def main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    accuracy_table=knn_algorithm(51, train_euclidean, train_data)\n    graph_accuracy(accuracy_table, \"training data\")\n    # message\n    print(\"hw1 is done\")\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def main():\n    accuracy_train=pd.DataFrame()\n    accuracy_test=pd.DataFrame()\n    # iterate 20 times \n    for try_count in range(2):\n        print(\"================================================================================\")\n        print(f\"[[ try = {try_count+1} ]]\")\n        # preprocess dataset\n        train_data, test_data=process_dataset()\n        # train_data",
         "detail": "test1",
         "documentation": {}
     }
