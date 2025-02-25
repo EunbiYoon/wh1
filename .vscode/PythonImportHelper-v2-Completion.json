@@ -1,0 +1,119 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "sklearn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sklearn",
+        "description": "sklearn",
+        "detail": "sklearn",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib",
+        "description": "matplotlib",
+        "detail": "matplotlib",
+        "documentation": {}
+    },
+    {
+        "label": "process_dataset",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def process_dataset():\n    # read CSV file\n    wdbc_file = pd.read_csv('wdbc.csv', header=None)\n    # convert DataFrame to NumPy array\n    wdbc_numpy = wdbc_file.to_numpy()\n    # min-max normalization using NumPy = (x-min)/(max-min)\n    # for last column, min = 0 & max =1 -> value is just itself\n    normalized_numpy = (wdbc_numpy - np.min(wdbc_numpy, axis=0)) / (np.max(wdbc_numpy, axis=0) - np.min(wdbc_numpy, axis=0))\n    # change normalized data to pandas dataframe\n    normalized_data = pd.DataFrame(normalized_numpy, columns=wdbc_file.columns)",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "euclidean_formula",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def euclidean_formula(x1,x2):\n    euclidean_distance = np.sqrt(np.sum(x1-x2)**2)\n    return euclidean_distance\n# check majority\ndef majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  \n    count_0 = list.value_counts().get(0, 0) \n    #betwen 1 and 0 which one is more\n    if count_1 > count_0:",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "majority_formula",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  \n    count_0 = list.value_counts().get(0, 0) \n    #betwen 1 and 0 which one is more\n    if count_1 > count_0:\n        return 1\n    else:\n        return 0\n# Calculate Euclidean Distane in train_data",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "euclidean_matrix",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def euclidean_matrix(train_data):\n    train_euclidean=np.zeros((len(train_data),len(train_data)))\n    for i in range(len(train_data)):\n        for j in range(len(train_data)):\n            train_euclidean[i,j]=euclidean_formula(train_data.iloc[i], train_data.iloc[j])\n    train_euclidean=pd.DataFrame(train_euclidean)\n    train_euclidean.to_excel(\"train_eculidean.xlsx\")\n    return train_euclidean\n# Insert predicted list in the original dataset at the last column\ndef insert_predicted(predicted_list, train_data):",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "insert_predicted",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def insert_predicted(predicted_list, train_data):\n    train_data.loc[-1]=predicted_list\n    return train_data\n# KNN algorithm using Euclidian Matrix\ndef knn_algorithm(k, train_euclidean, train_data):\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "knn_algorithm",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def knn_algorithm(k, train_euclidean, train_data):\n    # Iterate over k values : 1~51 odd number\n    for i in range(1,k+1,2): \n        # j is for data instances \n        for j in range(len(train_euclidean)):\n            # find smallest components count:k for xj\n            k_smallest_column=train_euclidean.loc[j].nsmallest(k)\n            # get the index list from smallest_column\n            smallest_index_list=k_smallest_column.index.tolist()\n            # depends on k, cut off list",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "accuracy_matrix",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def accuracy_matrix():\n    ret\n# Graph created with k\ndef graph_knn():\n    return 0\n# main function - united all function ahead\ndef main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "graph_knn",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def graph_knn():\n    return 0\n# main function - united all function ahead\ndef main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
+        "detail": "test1",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test1",
+        "description": "test1",
+        "peekOfCode": "def main():\n    train_data, test_data=process_dataset()\n    train_euclidean=euclidean_matrix(train_data)\n    knn_algorithm(51, train_euclidean, train_data)\n# ensures that the main function is executed only\nif __name__ == \"__main__\":\n    main()",
+        "detail": "test1",
+        "documentation": {}
+    }
+]

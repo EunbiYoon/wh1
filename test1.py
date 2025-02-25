@@ -93,7 +93,6 @@ def knn_algorithm(k, train_euclidean, train_data):
 
             # merge final_predicted_value to train_data
             train_data.at[j,"k="+str(i)]=final_predicted_value
-            train_data.to_excel("merge_k.xlsx")
 
             print(f"make knn algorithm : k={i} , train_instance={j}")
 
@@ -103,7 +102,7 @@ def knn_algorithm(k, train_euclidean, train_data):
 
 # Accuracy in Training and Testing
 def accuracy_matrix():
-    return 0
+    ret
 
 # Graph created with k
 def graph_knn():
