@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import re
 
 
-# Prepared data before KNN
+# Prepared train_data, test_data
 def process_dataset():
     # read CSV file
     wdbc_file = pd.read_csv('wdbc.csv', header=None)
@@ -21,11 +21,9 @@ def process_dataset():
     normalized_data = pd.DataFrame(normalized_numpy, columns=wdbc_file.columns)
 
     # shuffle the DataFrame
-    ##### 나중에 지우기 랜덤하게 하지 않게 하기 위해서 고정함 random_state=42
     shuffled_data = sk.utils.shuffle(normalized_data)
 
     # split data with training and testing
-    ##### 나중에 지우기 랜덤하게 하지 않게 하기 위해서 고정함 random_state=42
     train_data, test_data= sk.model_selection.train_test_split(shuffled_data, test_size=0.2)
 
     # reset index both train_data and test_data
@@ -120,7 +118,7 @@ def knn_algorithm(k, train_euclidean, data, accuracy_table, data_info, try_count
         # calcualte accuracy depending on k and make accuracy_list
         accuracy_value=calculate_accuracy(knn_data[len(data.columns)-1], knn_data["k="+str(i)])
         accuracy_table.at["try="+str(try_count),"accuracy (k="+str(i)+")"]=accuracy_value
-        print("\n*** Accuracy table ***")
+        print("\n*** Accuracy table ==> "+str(data_info)+" dataset ***")
         print(accuracy_table)
 
     return knn_data, accuracy_table 
@@ -155,13 +153,16 @@ def draw_graph(accuracy_table, title):
     mean_values = accuracy_table.loc['mean']
     std_values =accuracy_table.loc['std']
 
+    print("error detect")
+    print(mean_values)
+
     # plot the data
     plt.figure(figsize=(6, 4))
     plt.errorbar(
         k_values,            # x-axis: k=1,3,5,7
         mean_values,         # y-axis: mean values
         yerr=std_values,     # error bars: std values
-        fmt='o--',           # 'o' marker with a dashed line
+        fmt='o',           # 'o' marker with a line
         capsize=5,           # size of the error bar caps
         label='Mean ± STD'
     )
@@ -171,14 +172,14 @@ def draw_graph(accuracy_table, title):
     plt.ylabel("Accuracy over "+title)
     plt.title(title)
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
-    plt.show()
 
     # message
-    print("save graph image file to the folder")
+    print("saved graph image file...")
 
 # main function - united all function ahead
 def main():
-    accuracy_table=pd.DataFrame()
+    train_accuracy_table=pd.DataFrame()
+    test_accuracy_table=pd.DataFrame()
 
     # iterate 20 times 
     for try_count in range(1,21):
@@ -188,36 +189,36 @@ def main():
         # preprocess dataset
         train_data, test_data=process_dataset()
 
-        # train with train_data to make predicted value. compare actual data in train_data and predicted value.
+        # make euclidean-knn algorithm using train_data and check accuracy between trian_data, test_data
         train_euclidean=euclidean_matrix(train_data, train_data)
-        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,accuracy_table, "train", try_count)
+        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data, train_accuracy_table, "train", try_count)
 
-        # train with train_data to make predicted value. compare actual data in test_data and predicted value.
-        # test_euclidean=euclidean_matrix(train_data, test_data)
-        # test_knn, test_accuracy=knn_algorithm(51, train_euclidean, test_data,accuracy_table, "test", try_count)
+        test_euclidean=euclidean_matrix(train_data, test_data)
+        test_knn, test_accuracy=knn_algorithm(51, test_euclidean, test_data, test_accuracy_table, "test", try_count)
 
-    # make train_graph, test_graph
+    # draw graph
     train_graph_table=accuracy_avg_std(train_accuracy)
     draw_graph(train_graph_table,"train_dataset")
-    # test_graph_table=accuracy_avg_std(test_accuracy)
-    # draw_graph(test_graph_table,"train_dataset")
+
+    test_graph_table=accuracy_avg_std(test_accuracy)
+    draw_graph(test_graph_table,"test_dataset")
 
     # transfer to excel
-    train_data.to_excel('train_data.xlsx')
+    train_data.to_excel('train_data.xlsx') 
     train_euclidean.to_excel("train_euclidean.xlsx")
     train_knn.to_excel("train_knn.xlsx")
-    train_accuracy.to_excel("accuracy_train.xlsx")
+    train_accuracy.to_excel("train_accuracy.xlsx")
     train_graph_table.to_excel('train_graph_table.xlsx')
 
-    # test_data.to_excel('train_data.xlsx')
-    # test_euclidean.to_excel("train_euclidean.xlsx")
-    # test_knn.to_excel("train_knn.xlsx")
-    # test_accuracy.to_excel("accuracy_train.xlsx")
-    # test_graph_table.to_excel('train_graph_table.xlsx')
+    test_data.to_excel('test_data.xlsx')
+    test_euclidean.to_excel("test_euclidean.xlsx")
+    test_knn.to_excel("test_knn.xlsx")
+    test_accuracy.to_excel("test_accuracy.xlsx")
+    test_graph_table.to_excel('test_graph_table.xlsx')
 
     # message
     print("[[ Complete task! ]]\n")
 
-# ensures that the main function is executed only
+# ensures that the main function is executed only.
 if __name__ == "__main__":
     main()
