@@ -169,6 +169,7 @@ def draw_graph(accuracy_table, title):
     # formatting 
     plt.xlabel("Value of k")
     plt.ylabel("Accuracy over "+title)
+    plt.title(title)
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
     plt.show()
 
@@ -180,39 +181,42 @@ def main():
     accuracy_table=pd.DataFrame()
 
     # iterate 20 times 
-    for try_count in range(1,2):
+    for try_count in range(1,21):
         print("\n================================================================================")
         print(f"[[ try = {try_count} ]]")
         
         # preprocess dataset
         train_data, test_data=process_dataset()
-        print(train_data)
 
         # train with train_data to make predicted value. compare actual data in train_data and predicted value.
         train_euclidean=euclidean_matrix(train_data, train_data)
         train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,accuracy_table, "train", try_count)
 
         # train with train_data to make predicted value. compare actual data in test_data and predicted value.
-        # test_euclidean=euclidean_matrix(train_data,test_data)
-        # test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
-        # accuracy_test["try="+str(try_count)]=test_knn
+        # test_euclidean=euclidean_matrix(train_data, test_data)
+        # test_knn, test_accuracy=knn_algorithm(51, train_euclidean, test_data,accuracy_table, "test", try_count)
 
-        # train_data -> excel
-        train_data.to_excel('train_data.xlsx')
-        train_euclidean.to_excel("train_euclidean.xlsx")
-        train_knn.to_excel("train_knn.xlsx")
-        train_accuracy.to_excel("accuracy_train.xlsx")
-        print(train_accuracy)
-        
-        # make train_graph
-        train_graph_table=accuracy_avg_std(train_accuracy)
-        draw_graph(train_graph_table,"train_dataset")
+    # make train_graph, test_graph
+    train_graph_table=accuracy_avg_std(train_accuracy)
+    draw_graph(train_graph_table,"train_dataset")
+    # test_graph_table=accuracy_avg_std(test_accuracy)
+    # draw_graph(test_graph_table,"train_dataset")
 
-        # train_graph -> excel
-        train_graph_table.to_excel('train_graph_table.xlsx')
+    # transfer to excel
+    train_data.to_excel('train_data.xlsx')
+    train_euclidean.to_excel("train_euclidean.xlsx")
+    train_knn.to_excel("train_knn.xlsx")
+    train_accuracy.to_excel("accuracy_train.xlsx")
+    train_graph_table.to_excel('train_graph_table.xlsx')
 
-        # message
-        print("[[ Complete task! ]]\n")
+    # test_data.to_excel('train_data.xlsx')
+    # test_euclidean.to_excel("train_euclidean.xlsx")
+    # test_knn.to_excel("train_knn.xlsx")
+    # test_accuracy.to_excel("accuracy_train.xlsx")
+    # test_graph_table.to_excel('train_graph_table.xlsx')
+
+    # message
+    print("[[ Complete task! ]]\n")
 
 # ensures that the main function is executed only
 if __name__ == "__main__":
