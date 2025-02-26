@@ -48,7 +48,8 @@ def majority_formula(list):
     # count 1 or 0, if there is nothing value is 0
     count_1 = list.value_counts().get(1, 0)  
     count_0 = list.value_counts().get(0, 0) 
-    #betwen 1 and 0 which one is more
+
+    # betwen 1 and 0 which one is more
     if count_1 > count_0:
         return 1
     else:
@@ -76,10 +77,10 @@ def calculate_accuracy(actual_list, predicted_list):
     compared_result = list((actual_list == predicted_list).astype(int))
     
     # calculate accuracy
-    accuracy=(sum(compared_result)/len(compared_result))   
+    accuracy_list=(sum(compared_result)/len(compared_result))   
 
     # return accuracy value
-    return accuracy
+    return accuracy_list
 
                                         
 # KNN algorithm using Euclidian Matrix
@@ -89,11 +90,12 @@ def knn_algorithm(k, train_euclidean, data, data_info, try_count):
     knn_accuracy=pd.DataFrame()
 
     # Iterate over k values : 1~51 odd number
+    k=3
     for i in range(1,k+1,2): 
         # j is for data instances 
         for j in range(len(train_euclidean)):
             # find smallest components count:k for xj
-            k_smallest_column=train_euclidean.loc[j].nsmallest(k)
+            k_smallest_column=train_euclidean.loc[j].nsmallest(i)
 
             # get the index list from smallest_column
             smallest_index_list=k_smallest_column.index.tolist()
@@ -112,15 +114,15 @@ def knn_algorithm(k, train_euclidean, data, data_info, try_count):
 
             # merge final_predicted_value to train_data
             knn_data.at[j,"k="+str(i)]=final_predicted_value
-
+            
             # message
             print(f"knn algorithm : data_type={data_info} , try={try_count+1} , k={i} , instance_number={j}")
         
         # calcualte accuracy depending on k and make accuracy_list
         accuracy_value=calculate_accuracy(knn_data[len(data.columns)-1], knn_data["k="+str(i)])
-        knn_accuracy.at[i,"accuracy"]=accuracy_value
+        knn_accuracy["accuracy (k= "+str(i)+")"]=accuracy_value
 
-    return knn_accuracy 
+    return knn_data, knn_accuracy 
 
 
 # calculate average and standard deviation of accuracy
@@ -128,7 +130,6 @@ def accuracy_avg_std(accuracy_table):
     accuracy_table["Mean"]=accuracy_table.mean(axis=1)
     accuracy_table["Std"]=accuracy_table.std(axis=1)
     print(accuracy_table)
-
 
 
 # Graph created with k
@@ -153,30 +154,32 @@ def main():
     for try_count in range(2):
         print("================================================================================")
         print(f"[[ try = {try_count+1} ]]")
+        
         # preprocess dataset
         train_data, test_data=process_dataset()
 
         # train_data
         train_euclidean=euclidean_matrix(train_data, train_data)
-        train_knn=knn_algorithm(51, train_euclidean, train_data,"train",try_count)
-        accuracy_train["try="+str(try_count)]=train_knn
+        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,"train",try_count)
+        print(train_accuracy)
+        # accuracy_train.at["try="+str(try_count)]=train_accuracy
 
         # train_data -> excel
         train_data.to_excel('train_data.xlsx')
-        train_euclidean.to_excel("train_eucliean.xlsx")
+        train_euclidean.to_excel("train_euclidean.xlsx")
         train_knn.to_excel("train_knn.xlsx")
         accuracy_train.to_excel("accuracy_train.xlsx")
 
-        # test_data
-        test_euclidean=euclidean_matrix(train_data,test_data)
-        test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
-        accuracy_test["try="+str(try_count)]=test_knn
+        # # test_data
+        # test_euclidean=euclidean_matrix(train_data,test_data)
+        # test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
+        # accuracy_test["try="+str(try_count)]=test_knn
 
-        # test_data -> excel
-        test_data.to_excel('test_data.xlsx')
-        test_euclidean.to_excel("test_eucliean.xlsx")
-        test_knn.to_excel("test_knn.xlsx")
-        accuracy_test.to_excel("accuracy_test.xlsx")
+        # # test_data -> excel
+        # test_data.to_excel('test_data.xlsx')
+        # test_euclidean.to_excel("test_euclidean.xlsx")
+        # test_knn.to_excel("test_knn.xlsx")
+        # accuracy_test.to_excel("accuracy_test.xlsx")
     
     accuracy_train.to_excel("accuracy_train.xlsx")
     accuracy_train.to_excel("accuracy_test.xlsx")
