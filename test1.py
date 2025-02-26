@@ -84,13 +84,11 @@ def calculate_accuracy(actual_list, predicted_list):
 
                                         
 # KNN algorithm using Euclidian Matrix
-def knn_algorithm(k, train_euclidean, data, data_info, try_count):
+def knn_algorithm(k, train_euclidean, data, accuracy_table, data_info, try_count):
     # make empty dataframe
     knn_data=pd.DataFrame(data)
-    knn_accuracy=pd.DataFrame()
 
     # Iterate over k values : 1~51 odd number
-    k=3
     for i in range(1,k+1,2): 
         # j is for data instances 
         for j in range(len(train_euclidean)):
@@ -120,9 +118,11 @@ def knn_algorithm(k, train_euclidean, data, data_info, try_count):
         
         # calcualte accuracy depending on k and make accuracy_list
         accuracy_value=calculate_accuracy(knn_data[len(data.columns)-1], knn_data["k="+str(i)])
-        knn_accuracy["accuracy (k= "+str(i)+")"]=accuracy_value
+        accuracy_table.at["try="+str(try_count),"accuracy (k="+str(i)+")"]=accuracy_value
+        print("\n*** Accuracy table ***")
+        print(accuracy_table)
 
-    return knn_data, knn_accuracy 
+    return knn_data, accuracy_table 
 
 
 # calculate average and standard deviation of accuracy
@@ -148,27 +148,25 @@ def graph_accuracy(accuracy_table, title):
 
 # main function - united all function ahead
 def main():
-    accuracy_train=pd.DataFrame()
-    accuracy_test=pd.DataFrame()
+    accuracy_table=pd.DataFrame()
+
     # iterate 20 times 
-    for try_count in range(2):
-        print("================================================================================")
-        print(f"[[ try = {try_count+1} ]]")
+    for try_count in range(1,21):
+        print("\n================================================================================")
+        print(f"[[ try = {try_count} ]]")
         
         # preprocess dataset
         train_data, test_data=process_dataset()
 
         # train_data
         train_euclidean=euclidean_matrix(train_data, train_data)
-        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,"train",try_count)
-        print(train_accuracy)
-        # accuracy_train.at["try="+str(try_count)]=train_accuracy
+        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,accuracy_table,"train",try_count)
 
         # train_data -> excel
         train_data.to_excel('train_data.xlsx')
         train_euclidean.to_excel("train_euclidean.xlsx")
         train_knn.to_excel("train_knn.xlsx")
-        accuracy_train.to_excel("accuracy_train.xlsx")
+        train_accuracy.to_excel("accuracy_train.xlsx")
 
         # # test_data
         # test_euclidean=euclidean_matrix(train_data,test_data)
@@ -181,8 +179,7 @@ def main():
         # test_knn.to_excel("test_knn.xlsx")
         # accuracy_test.to_excel("accuracy_test.xlsx")
     
-    accuracy_train.to_excel("accuracy_train.xlsx")
-    accuracy_train.to_excel("accuracy_test.xlsx")
+
     # make graph
     # graph_accuracy(accuracy_table, "training data")
     # message
