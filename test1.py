@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import sklearn as sk
 import matplotlib.pyplot as plt
+import re
 
 
 # Prepared data before KNN
@@ -114,7 +115,7 @@ def knn_algorithm(k, train_euclidean, data, accuracy_table, data_info, try_count
             knn_data.at[j,"k="+str(i)]=final_predicted_value
             
             # message
-            print(f"knn algorithm : data_type={data_info} , try={try_count+1} , k={i} , instance_number={j}")
+            print(f"knn algorithm : data_type={data_info} , try={try_count} , k={i} , instance_number={j}")
         
         # calcualte accuracy depending on k and make accuracy_list
         accuracy_value=calculate_accuracy(knn_data[len(data.columns)-1], knn_data["k="+str(i)])
@@ -127,21 +128,49 @@ def knn_algorithm(k, train_euclidean, data, accuracy_table, data_info, try_count
 
 # calculate average and standard deviation of accuracy
 def accuracy_avg_std(accuracy_table):
-    accuracy_table["Mean"]=accuracy_table.mean(axis=1)
-    accuracy_table["Std"]=accuracy_table.std(axis=1)
-    print(accuracy_table)
+    # add mean and std bottom of the each column (same k, different try)
+    meanstd = accuracy_table.agg(['mean', 'std'])
+    
+    # merge accuracy_table with meanstd table 
+    graph_table=pd.concat([accuracy_table,meanstd])
+
+    # message
+    print("Calcuate mean and standard deviation of each k value")
+    return graph_table
+
 
 
 # Graph created with k
-def graph_accuracy(accuracy_table, title):
+def draw_graph(accuracy_table, title):
+    # Extract integer k values from the column names using regex
+    k_values = []
+    for col in accuracy_table.columns:
+        match = re.search(r'\(k=(\d+)\)', col)
+        if match:
+            k_values.append(int(match.group(1)))
+        else:
+            k_values.append(col)  # if the pattern is not found, keep the original name
+
+    # Get mean and std rows from the DataFrame
+    mean_values = accuracy_table.loc['mean']
+    std_values =accuracy_table.loc['std']
+
     # plot the data
-    plt.figure(figsize=(10, 5))
-    plt.plot(accuracy_table)
+    plt.figure(figsize=(6, 4))
+    plt.errorbar(
+        k_values,            # x-axis: k=1,3,5,7
+        mean_values,         # y-axis: mean values
+        yerr=std_values,     # error bars: std values
+        fmt='o--',           # 'o' marker with a dashed line
+        capsize=5,           # size of the error bar caps
+        label='Mean ± STD'
+    )
 
     # formatting 
     plt.xlabel("Value of k")
     plt.ylabel("Accuracy over "+title)
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
+    plt.show()
 
     # message
     print("save graph image file to the folder")
@@ -151,39 +180,39 @@ def main():
     accuracy_table=pd.DataFrame()
 
     # iterate 20 times 
-    for try_count in range(1,21):
+    for try_count in range(1,2):
         print("\n================================================================================")
         print(f"[[ try = {try_count} ]]")
         
         # preprocess dataset
         train_data, test_data=process_dataset()
+        print(train_data)
 
-        # train_data
+        # train with train_data to make predicted value. compare actual data in train_data and predicted value.
         train_euclidean=euclidean_matrix(train_data, train_data)
-        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,accuracy_table,"train",try_count)
+        train_knn, train_accuracy=knn_algorithm(51, train_euclidean, train_data,accuracy_table, "train", try_count)
+
+        # train with train_data to make predicted value. compare actual data in test_data and predicted value.
+        # test_euclidean=euclidean_matrix(train_data,test_data)
+        # test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
+        # accuracy_test["try="+str(try_count)]=test_knn
 
         # train_data -> excel
         train_data.to_excel('train_data.xlsx')
         train_euclidean.to_excel("train_euclidean.xlsx")
         train_knn.to_excel("train_knn.xlsx")
         train_accuracy.to_excel("accuracy_train.xlsx")
+        print(train_accuracy)
+        
+        # make train_graph
+        train_graph_table=accuracy_avg_std(train_accuracy)
+        draw_graph(train_graph_table,"train_dataset")
 
-        # # test_data
-        # test_euclidean=euclidean_matrix(train_data,test_data)
-        # test_knn=knn_algorithm(51, test_euclidean, test_data,"test",try_count)
-        # accuracy_test["try="+str(try_count)]=test_knn
+        # train_graph -> excel
+        train_graph_table.to_excel('train_graph_table.xlsx')
 
-        # # test_data -> excel
-        # test_data.to_excel('test_data.xlsx')
-        # test_euclidean.to_excel("test_euclidean.xlsx")
-        # test_knn.to_excel("test_knn.xlsx")
-        # accuracy_test.to_excel("accuracy_test.xlsx")
-    
-
-    # make graph
-    # graph_accuracy(accuracy_table, "training data")
-    # message
-    print("[[ Complete task! ]]\n")
+        # message
+        print("[[ Complete task! ]]\n")
 
 # ensures that the main function is executed only
 if __name__ == "__main__":
