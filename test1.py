@@ -42,18 +42,6 @@ def euclidean_formula(x1,x2):
     euclidean_distance = np.sqrt(np.sum(x1-x2)**2)
     return euclidean_distance
 
-# check majority
-def majority_formula(list):
-    # count 1 or 0, if there is nothing value is 0
-    count_1 = list.value_counts().get(1, 0)  
-    count_0 = list.value_counts().get(0, 0) 
-
-    # betwen 1 and 0 which one is more
-    if count_1 > count_0:
-        return 1
-    else:
-        return 0
-
 # Calculate Euclidean Distane in train_data
 def euclidean_matrix(train_data, test_data):
     # make numpy matrix
@@ -68,6 +56,18 @@ def euclidean_matrix(train_data, test_data):
     # message
     print("Euclidean matrix has been created")
     return train_euclidean
+
+# check majority
+def majority_formula(list):
+    # count 1 or 0, if there is nothing value is 0
+    count_1 = list.value_counts().get(1, 0)  
+    count_0 = list.value_counts().get(0, 0) 
+
+    # betwen 1 and 0 which one is more
+    if count_1 > count_0:
+        return 1
+    else:
+        return 0
 
 
 # Accuracy in Training and Testing
@@ -176,7 +176,7 @@ def draw_graph(accuracy_table, title):
     # message
     print("saved graph image file...")
 
-# main function - united all function ahead
+# main function - united all function above
 def main():
     train_accuracy_table=pd.DataFrame()
     test_accuracy_table=pd.DataFrame()

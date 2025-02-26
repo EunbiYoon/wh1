@@ -29,6 +29,7 @@ def process_dataset():
     # return final train_data, test_data
     return train_data, test_data
 
+# get class from each attribute
 def attribute_class(car_data):
     # reset column name as number
     car_data.columns=list(range(len(car_data.columns)))
@@ -40,7 +41,37 @@ def attribute_class(car_data):
         unique_attributes[i]=remove_duplicate
 
 # calculate entropy
+def entropy_formula():
+    return 3
+
+# make entropy_matrix using entropy_foumula
+def entropy_matrix():
+    return 3
+
+# check majority
+def majority_formula(list):
+    return 3
+
+# Accuracy in Training and Testing
+def calculate_accuracy(actual_list, predicted_list):
+    # compare two column. matched->1, mismatched->0
+    compared_result = list((actual_list == predicted_list).astype(int))
+    
+    # calculate accuracy
+    accuracy_list=(sum(compared_result)/len(compared_result))   
+
+    # return accuracy value
+    return accuracy_list
+
 # make decision tree
+def decision_tree():
+    return 4
+
+# draw graph
+def draw_graph():
+    return 4
+
+# main function - united all function above
 def main():
     process_dataset()
 
