@@ -105,20 +105,19 @@ y = df['class']
 train_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)
 
 # Plot histograms
-plt.figure(figsize=(12, 5))
-plt.subplot(1, 2, 1)
+plt.figure(figsize=(6, 4))
 plt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)
 plt.xlabel('Training Accuracy')
-plt.ylabel('Frequency')
-plt.title('Training Accuracy Distribution')
+plt.ylabel('(Accuracy Frequency on Training Data)')
+plt.savefig('train_accuracy.png',dpi=300, bbox_inches='tight')
 
-plt.subplot(1, 2, 2)
+plt.figure(figsize=(6, 4))
 plt.hist(test_acc, bins=10, edgecolor='black', alpha=0.7)
 plt.xlabel('Testing Accuracy')
-plt.ylabel('Frequency')
-plt.title('Testing Accuracy Distribution')
+plt.ylabel('(Accuracy Frequency on Testing Data)')
+plt.savefig('test_accuracy.png',dpi=300, bbox_inches='tight')
 
-plt.tight_layout()
+
 plt.savefig('accuracy_histogram.png')
 
 # Print mean and standard deviation
