@@ -170,50 +170,69 @@ def branch_decision(count, train_attribute, choosen_attribute, attribute_label, 
 def draw_graph():
     return 4
 
-# main function - united all function above
 def main():
     # preprocess data
-    # train_attribute = 1382 / test_attribute = 346 / total = 1728
-    car_data, train_attribute, train_class, test_attribute, test_class=process_dataset()
+    car_data, train_attribute, train_class, test_attribute, test_class = process_dataset()
 
     # build_tree
-    decision_tree=pd.DataFrame()
+    decision_tree = pd.DataFrame()
 
     ######### training data ########
-    # Select First Attribute! 
+    ########## Select First Attribute! 
     print("\n--> Selecting 1st Attribute...")
+    level_count = 0
     # choose first attribute to sort
-    choosen_attribute_1=entropy_logic(train_class, train_attribute, 1)
+    choosen_attribute_1 = entropy_logic(train_class, train_attribute, 1)
     # get the real column name
-    column_name_1=car_data.columns[choosen_attribute_1]
-    # input decision tree
-    decision_tree.at[0,"level_0"]=column_name_1
+    column_name_1 = car_data.columns[choosen_attribute_1]
+    # input decision tree using pd.concat
+    decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0': [column_name_1]})], ignore_index=True)
 
-    # Select Second Attribute! 
-    print("\n--> Selecting 2nd Attribute...")
-
+    ########## Select Second Attribute! 
     # unique attribute
-    unique_1=unique_attribute(train_attribute)
+    unique_1 = unique_attribute(train_attribute)
     # separate train_attribute depends on choosen first attribute
-    attribute_label_1=unique_1[choosen_attribute_1].dropna().tolist()
+    attribute_label_1 = unique_1[choosen_attribute_1].dropna().tolist()
     # set other features
-    train_attribute_1=train_attribute
-    train_class_1=train_class
+    train_attribute_1 = train_attribute
+    train_class_1 = train_class
     # branching
     for i in range(len(attribute_label_1)):
-        divided_class_2, branch_attribute_2=branch_decision(i, train_attribute_1, choosen_attribute_1, attribute_label_1, train_class_1)
+        print("\n--> Selecting 2nd Attribute :: " + str(i + 1) + "th Branches...")
+        level_count = level_count + 1
+        divided_class_2, choosen_attribute_2 = branch_decision(i, train_attribute_1, choosen_attribute_1, attribute_label_1, train_class_1)
         # check able to stop or not
-        if branch_attribute_2=="zero_entropy":
-            last_index=len(decision_tree)
-            # input decision tree
-            decision_tree.at[last_index,"level_1"]=attribute_label_1[i]
-            decision_tree.at[last_index,"level_2"]=divided_class_2.iloc[0]
-    
-            
-    print("\n###### DECISION TREE #####")
+        if choosen_attribute_2 == "zero_entropy":
+            # input decision tree using pd.concat
+            decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0':column_name_1,'level_1': [attribute_label_1[i]], 'level_2': [divided_class_2.iloc[0]]})], ignore_index=True)
+        else:
+            # Select Third Attribute! 
+            print("\n--> Selecting 3rd Attribute...")
+            level_count = level_count + 1
+            # unique attribute
+            unique_2 = unique_attribute(train_attribute)
+            # separate train_attribute depends on choosen second attribute
+            attribute_label_2 = unique_2[choosen_attribute_2].dropna().tolist()
+            # set other features
+            train_attribute_2 = train_attribute
+            train_class_2 = train_class
+            # branching
+            for j in range(len(attribute_label_2)):
+                divided_class_3, branch_attribute_3 = branch_decision(j, train_attribute_2, choosen_attribute_2, attribute_label_2, train_class_2)
+                # check able to stop or not
+                if branch_attribute_3 == "zero_entropy":
+                    # input decision tree using pd.concat
+                    decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0':column_name_1,'level_1':[attribute_label_1[i]],'level_2': [attribute_label_2[j]], 'level_3': [divided_class_3.iloc[0]]})], ignore_index=True)
+                    print("\n\n")
+                    print(f"Updated Decision Tree: \n{decision_tree}")
+                else:
+                    # Further branching logic can be added as needed
+                    pass
+
+    print("Final Decision Tree:")
     print(decision_tree)
-    # message
-    print("\n[[ Complete task! ]]\n")
+
+
 
 # ensures that the main function is executed only.
 if __name__ == "__main__":
