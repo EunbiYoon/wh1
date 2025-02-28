@@ -183,33 +183,31 @@ def main():
     # Select First Attribute! 
     print("\n--> Selecting 1st Attribute...")
     # choose first attribute to sort
-    choosen_first_attribute=entropy_logic(train_class, train_attribute, 1)
+    choosen_attribute_1=entropy_logic(train_class, train_attribute, 1)
     # get the real column name
-    first_column_name=car_data.columns[choosen_first_attribute]
+    column_name_1=car_data.columns[choosen_attribute_1]
     # input decision tree
-    decision_tree.at[0,"level_0"]=first_column_name
+    decision_tree.at[0,"level_0"]=column_name_1
 
     # Select Second Attribute! 
     print("\n--> Selecting 2nd Attribute...")
-    # sorted train
-    # unique attribute
-    first_unique=unique_attribute(train_attribute)
-    # separate train_attribute depends on choosen first attribute
-    first_attribute_label=first_unique[choosen_first_attribute].dropna().tolist()
-    print("first_unique")
-    print(first_unique)
-    print("first_attribute_label")
-    print(first_attribute_label)
-    
-    for i in range(len(first_attribute_label)):
-        second_divided_class, second_branch_attribute=branch_decision(i, train_attribute, choosen_first_attribute, first_attribute_label, train_class)
 
+    # unique attribute
+    unique_1=unique_attribute(train_attribute)
+    # separate train_attribute depends on choosen first attribute
+    attribute_label_1=unique_1[choosen_attribute_1].dropna().tolist()
+    # set other features
+    train_attribute_1=train_attribute
+    train_class_1=train_class
+    # branching
+    for i in range(len(attribute_label_1)):
+        divided_class_2, branch_attribute_2=branch_decision(i, train_attribute_1, choosen_attribute_1, attribute_label_1, train_class_1)
         # check able to stop or not
-        if second_branch_attribute=="zero_entropy":
+        if branch_attribute_2=="zero_entropy":
             last_index=len(decision_tree)
             # input decision tree
-            decision_tree.at[last_index,"level_1"]=first_attribute_label[i]
-            decision_tree.at[last_index,"level_2"]=second_divided_class.iloc[0]
+            decision_tree.at[last_index,"level_1"]=attribute_label_1[i]
+            decision_tree.at[last_index,"level_2"]=divided_class_2.iloc[0]
     
             
     print("\n###### DECISION TREE #####")
