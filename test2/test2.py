@@ -1,146 +1,160 @@
 import numpy as np
 import pandas as pd
+import json
 import matplotlib.pyplot as plt
-from collections import Counter
 from sklearn.model_selection import train_test_split
-from sklearn.utils import shuffle
-from graphviz import Digraph
 
-# 데이터 로드 및 전처리
-df = pd.read_csv("car.csv")  # 파일 경로 수정 필요
-
-# shuffle data
-df = shuffle(df).reset_index()
-print(df)
-
-X = df.iloc[:, :-1]  # 특징 데이터 (6개 속성)
-y = df.iloc[:, -1]   # 라벨 데이터 (클래스)
-
-# 범주형 데이터를 숫자로 변환 (LabelEncoder 없이)
-for col in X.columns:
-    X[col] = pd.factorize(X[col])[0]  # 각 범주를 고유 숫자로 변환
-y = pd.factorize(y)[0]  # 클래스 라벨도 숫자로 변환
-print("y")
-print(y)
-print("X")
-print(X)
-
-# 엔트로피 계산
+# Function to compute entropy
 def entropy(y):
-    counts = np.bincount(y)
-    probabilities = counts / len(y)
-    return -np.sum([p * np.log2(p) for p in probabilities if p > 0])
+    class_counts = y.value_counts()
+    probabilities = class_counts / len(y)
+    return -np.sum(probabilities * np.log2(probabilities))
 
-# 정보 이득 계산
-def information_gain(X, y, feature_idx):
-    base_entropy = entropy(y)
-    values, counts = np.unique(X[:, feature_idx], return_counts=True)
-    weighted_entropy = sum(
-        (counts[i] / np.sum(counts)) * entropy(y[X[:, feature_idx] == v])
-        for i, v in enumerate(values)
-    )
-    return base_entropy - weighted_entropy
+# Function to compute information gain
+def information_gain(X, y, feature):
+    total_entropy = entropy(y)
+    values = X[feature].unique()
+    weighted_entropy = 0
+    for value in values:
+        subset_y = y[X[feature] == value]
+        weighted_entropy += (len(subset_y) / len(y)) * entropy(subset_y)
+    
+    return total_entropy - weighted_entropy
 
-# 트리 노드 생성
+# Class representing a decision tree node
 class Node:
-    def __init__(self, feature=None, value=None, left=None, right=None, label=None):
-        self.feature = feature  # 분할 기준 속성
-        self.value = value  # 분할 기준 값
-        self.left = left  # 왼쪽 서브트리
-        self.right = right  # 오른쪽 서브트리
-        self.label = label  # 리프 노드 클래스 값
+    def __init__(self, feature=None, label=None, children=None):
+        self.feature = feature
+        self.label = label
+        self.children = children if children else {}
 
-# 결정 트리 구축
-def build_tree(X, y):
-    if len(set(y)) == 1:
-        print(y[0])
-        return Node(label=y[0])  # 모든 샘플이 동일한 클래스 -> 리프 노드 생성
+# Function to build the decision tree
+def build_tree(X, y, features):
+    if len(y.unique()) == 1:
+        return Node(label=y.iloc[0])
+    
+    if len(features) == 0:
+        return Node(label=y.mode()[0])
+    
+    best_feature = None
+    best_info_gain = -np.inf
+    for feature in features:
+        info_gain = information_gain(X, y, feature)
+        if info_gain > best_info_gain:
+            best_info_gain = info_gain
+            best_feature = feature
+    
+    tree = Node(feature=best_feature)
+    remaining_features = [f for f in features if f != best_feature]
+    
+    for value in X[best_feature].unique():
+        subset_X = X[X[best_feature] == value].drop(columns=[best_feature])
+        subset_y = y[X[best_feature] == value]
+        child_node = build_tree(subset_X, subset_y, remaining_features)
+        tree.children[value] = child_node
+    
+    return tree
 
-    if X.shape[1] == 0:
-        print(Counter(y).most_common(1)[0][0])
-        return Node(label=Counter(y).most_common(1)[0][0])  # 속성이 더 없으면 다수 클래스 반환
-
-    # 최적의 속성 찾기
-    gains = [information_gain(X, y, i) for i in range(X.shape[1])]
-    best_feature = np.argmax(gains)
-
-    if gains[best_feature] == 0:
-        print(Counter(y).most_common(1)[0][0])
-        return Node(label=Counter(y).most_common(1)[0][0])  # 정보 이득이 없으면 다수 클래스 반환
-
-    root = Node(feature=best_feature)
-    values = np.unique(X[:, best_feature])
-
-    for v in values:
-        sub_X = X[X[:, best_feature] == v]
-        sub_y = y[X[:, best_feature] == v]
-
-        if len(sub_X) == 0:
-            continue
-
-        child = build_tree(sub_X, sub_y)
-        if v == values[0]:  # 왼쪽 자식
-            root.left = child
-        else:  # 오른쪽 자식
-            root.right = child
-
-    return root
-
-# 예측 함수
-def predict(tree, sample):
+# Function to convert tree to dictionary (for JSON storage)
+def tree_to_dict(tree):
     if tree.label is not None:
-        return tree.label
-    if sample[tree.feature] == 0:
-        return predict(tree.left, sample)
-    else:
-        return predict(tree.right, sample)
-
-# 모델 평가 함수
-def evaluate(X_train, y_train, X_test, y_test):
-    tree = build_tree(X_train, y_train)
-
-    y_train_pred = np.array([predict(tree, x) for x in X_train])
-    y_test_pred = np.array([predict(tree, x) for x in X_test])
-
-    train_accuracy = np.mean(y_train_pred == y_train)
-    test_accuracy = np.mean(y_test_pred == y_test)
+        return {'label': tree.label}
     
-    return train_accuracy, test_accuracy
+    return {
+        'feature': tree.feature,
+        'children': {str(value): tree_to_dict(child) for value, child in tree.children.items()}
+    }
 
-# 실험 수행 (100회)
-train_accuracies, test_accuracies = [], []
+# Function to make predictions using the tree
+def predict(tree, X):
+    predictions = []
+    for _, row in X.iterrows():
+        node = tree
+        while node.label is None:
+            if row[node.feature] not in node.children:
+                predictions.append(y.mode()[0])  # Assign most common class if unseen value
+                break
+            node = node.children[row[node.feature]]
+        else:
+            predictions.append(node.label)
+    return np.array(predictions)
 
-for _ in range(2):
-    X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.2, shuffle=True)
-    train_acc, test_acc = evaluate(X_train, y_train, X_test, y_test)
-    train_accuracies.append(train_acc)
-    test_accuracies.append(test_acc)
-    print("num"+str(_))
+# Function to train and evaluate the decision tree
+def evaluate(X, y, test_size=0.2, num_trials=100):
+    train_accuracies = []
+    test_accuracies = []
     
+    for trial in range(num_trials):
+        print(f"\n🔄 Trial {trial + 1} in progress...")  
 
-# 결과 시각화
+        # Ensure randomness in splitting
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=None, shuffle=True)
+        print("✅ Data successfully split!")
+
+        # Train the decision tree
+        tree = build_tree(X_train, y_train, X.columns)
+        print("🌲 Decision tree training completed!")
+
+        # Save JSON tree structure only for the first trial
+        if trial == 0:
+            print("💾 Saving decision tree structure as 'decision_tree.json'...")
+            with open("decision_tree.json", "w") as json_file:
+                json.dump(tree_to_dict(tree), json_file, indent=4)
+            print("✅ JSON file saved!")
+
+        # Evaluate on training data
+        train_predictions = predict(tree, X_train)
+        train_acc = np.mean(train_predictions == y_train)
+
+        # Evaluate on test data
+        test_predictions = predict(tree, X_test)
+        test_acc = np.mean(test_predictions == y_test)
+
+        train_accuracies.append(train_acc)
+        test_accuracies.append(test_acc)
+
+        print(f"📊 Trial {trial + 1}: Training Accuracy = {train_acc:.4f}, Testing Accuracy = {test_acc:.4f}")
+
+    print("\n🎉 All experiments completed!")
+    return train_accuracies, test_accuracies
+
+# Load dataset
+print("📂 Loading dataset...")
+df = pd.read_csv("car.csv")
+print("✅ Dataset successfully loaded!")
+
+# Preprocess data
+X = df.iloc[:, :-1]  # First 6 columns as features
+y = df.iloc[:, -1]   # Last column as labels
+print("🔍 Data preprocessing completed!")
+
+# Train and evaluate the model (100 trials)
+train_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)
+
+# Compute mean and standard deviation
+train_mean, train_std = np.mean(train_acc), np.std(train_acc)
+test_mean, test_std = np.mean(test_acc), np.std(test_acc)
+
+print(f"\n📢 Final Results:")
+print(f"✅ Training Accuracy Mean: {train_mean:.4f} (Std: {train_std:.4f})")
+print(f"✅ Testing Accuracy Mean: {test_mean:.4f} (Std: {test_std:.4f})")
+
+# Plot histograms for accuracy distributions
 plt.figure(figsize=(12, 5))
 
+# Training accuracy histogram
 plt.subplot(1, 2, 1)
-plt.hist(train_accuracies, bins=10, edgecolor='black', alpha=0.7)
-plt.xlabel("Accuracy on Training Data")
+plt.hist(train_acc, bins=10, color='blue', edgecolor='black', alpha=0.7, density=True)
+plt.xlabel("Accuracy")
 plt.ylabel("Frequency")
-plt.title("Training Accuracy Distribution")
+plt.title(f"Training Accuracy Distribution\nMean={train_mean:.4f}, Std={train_std:.4f}")
 
+# Testing accuracy histogram
 plt.subplot(1, 2, 2)
-plt.hist(test_accuracies, bins=10, edgecolor='black', alpha=0.7)
-plt.xlabel("Accuracy on Testing Data")
+plt.hist(test_acc, bins=10, color='red', edgecolor='black', alpha=0.7, density=True)
+plt.xlabel("Accuracy")
 plt.ylabel("Frequency")
-plt.title("Testing Accuracy Distribution")
+plt.title(f"Testing Accuracy Distribution\nMean={test_mean:.4f}, Std={test_std:.4f}")
 
 plt.tight_layout()
 plt.savefig('accuracy_histogram.png')
-
-# 평균 및 표준편차 출력
-train_mean, train_std = np.mean(train_accuracies), np.std(train_accuracies)
-test_mean, test_std = np.mean(test_accuracies), np.std(test_accuracies)
-
-
-
-print(f"Training Accuracy: Mean = {train_mean:.4f}, Std = {train_std:.4f}")
-print(f"Testing Accuracy: Mean = {test_mean:.4f}, Std = {test_std:.4f}")
