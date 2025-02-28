@@ -69,7 +69,7 @@ def entropy_formula(data_series):
 
 
 # create entropy logic
-def entropy_logic(train_class, train_attribute):
+def entropy_logic(train_class, train_attribute, branch_info):
     # original entropy calculate
     original_entropy=entropy_formula(train_class)
         
@@ -101,7 +101,7 @@ def entropy_logic(train_class, train_attribute):
     
     # if there is all 0 entropy, stop the branching
     if (other_entropy==0).all().all():
-        print("====> Stopping branches and writing decision tree...")
+        print("[[ Entropy Table ==> Zero Entropy ]]")
         return "zero_entropy"
     
     # change all the components as integer
@@ -139,10 +139,30 @@ def entropy_logic(train_class, train_attribute):
     # print entropy_table
     print("[[ Entropy Table ==> Choosen Attribute = "+str(max_entropy_attribute)+"th Column ]]")
     print(other_entropy_final)
-    print("\n")
+
+    # save entropy_table
+    other_entropy_final.to_excel('entropy_table_'+str(branch_info)+'.xlsx')
 
     # return max_entropy_attribute
     return max_entropy_attribute
+
+def branch_decision(count, train_attribute, choosen_attribute, attribute_label, train_class):
+    print("====> "+str(count+1)+"th Branch :: Data Sorting...")
+    # divide attribute based on the first_attribute_column
+    divided_attribute=train_attribute[train_attribute[choosen_attribute]==attribute_label[count]]
+    # remove choosen attribute column
+    divided_attribute=divided_attribute.drop(columns=choosen_attribute)
+    # sorted index list from divided_attribute
+    index_class=divided_attribute.index.tolist()
+    # get the following class
+    divided_class = train_class.loc[index_class]
+
+    # message
+    print("====> "+str(count+1)+"th Branch :: Entropy Calculating...")
+    # choose first attribute to sort
+    branch_attribute=entropy_logic(divided_class, divided_attribute,2)
+    
+    return divided_class, branch_attribute
 
 
 
@@ -162,49 +182,36 @@ def main():
     ######### training data ########
     # Select First Attribute! 
     print("\n--> Selecting 1st Attribute...")
-    # unique attribute
-    first_unique=unique_attribute(train_attribute)
-
     # choose first attribute to sort
-    choosen_first_attribute=entropy_logic(train_class, train_attribute)
-
+    choosen_first_attribute=entropy_logic(train_class, train_attribute, 1)
     # get the real column name
     first_column_name=car_data.columns[choosen_first_attribute]
-
     # input decision tree
     decision_tree.at[0,"level_0"]=first_column_name
 
-    # separate train_attribute depends on choosen first attribute
-    first_attribute_labels=first_unique[choosen_first_attribute].dropna().tolist()
-
     # Select Second Attribute! 
-    print("\n-> Selecting 2th Attribute...")
-    for i in range(len(first_attribute_labels)):
-        print("====> 2th Attribute "+str(i+1)+"th Branch :: Data Sorting...")
-        # divide attribute based on the first_attribute_column
-        divided_attribute=train_attribute[train_attribute[choosen_first_attribute]==first_attribute_labels[i]]
-        # remove choosen attribute column
-        divided_attribute=divided_attribute.drop(columns=choosen_first_attribute)
-        # sorted index list from divided_attribute
-        index_class=divided_attribute.index.tolist()
-        # get the following class
-        divided_class = train_class.loc[index_class]
-
-        print("====> 2th Attribute "+str(i+1)+"th Branch :: Entropy Calculating...")
-        # choose first attribute to sort
-        second_attribute_column=entropy_logic(divided_class, divided_attribute)
-        # message
+    print("\n--> Selecting 2nd Attribute...")
+    # sorted train
+    # unique attribute
+    first_unique=unique_attribute(train_attribute)
+    # separate train_attribute depends on choosen first attribute
+    first_attribute_label=first_unique[choosen_first_attribute].dropna().tolist()
+    print("first_unique")
+    print(first_unique)
+    print("first_attribute_label")
+    print(first_attribute_label)
+    
+    for i in range(len(first_attribute_label)):
+        second_divided_class, second_branch_attribute=branch_decision(i, train_attribute, choosen_first_attribute, first_attribute_label, train_class)
 
         # check able to stop or not
-        if second_attribute_column=="zero_entropy":
+        if second_branch_attribute=="zero_entropy":
+            last_index=len(decision_tree)
             # input decision tree
-            decision_tree.at[1,"level_1"]=first_attribute_labels[i]
-            decision_tree.at[1,"level_2"]=divided_class.iloc[0]
-        else:
-            ee=3
-
-
-    print("\n-> Selecting 3rd Attribute...")
+            decision_tree.at[last_index,"level_1"]=first_attribute_label[i]
+            decision_tree.at[last_index,"level_2"]=second_divided_class.iloc[0]
+    
+            
     print("\n###### DECISION TREE #####")
     print(decision_tree)
     # message
