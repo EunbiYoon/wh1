@@ -170,6 +170,21 @@ def branch_decision(count, train_attribute, choosen_attribute, attribute_label, 
 def draw_graph():
     return 4
 
+
+
+def append_to_decision_tree(decision_tree, column_names, values):
+    """This function appends a row to the decision tree DataFrame."""
+    new_row = {column_names[i]: values[i] for i in range(len(column_names))}
+    return pd.concat([decision_tree, pd.DataFrame([new_row])], ignore_index=True)
+
+def process_branch(decision_tree, column_name_1, attribute_label_1, i, choosen_attribute_2, divided_class_2):
+    """This function handles the branch decision and appends data to the decision tree."""
+    # Append the result to decision tree
+    decision_tree = append_to_decision_tree(decision_tree, 
+                                            ['level_0', 'level_1', 'level_2'], 
+                                            [column_name_1, attribute_label_1[i], divided_class_2.iloc[0]])
+    return decision_tree
+
 def main():
     # preprocess data
     car_data, train_attribute, train_class, test_attribute, test_class = process_dataset()
@@ -181,58 +196,46 @@ def main():
     ########## Select First Attribute! 
     print("\n--> Selecting 1st Attribute...")
     level_count = 0
-    # choose first attribute to sort
     choosen_attribute_1 = entropy_logic(train_class, train_attribute, 1)
-    # get the real column name
     column_name_1 = car_data.columns[choosen_attribute_1]
-    # input decision tree using pd.concat
-    decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0': [column_name_1]})], ignore_index=True)
+    decision_tree = append_to_decision_tree(decision_tree, ['level_0'], [column_name_1])
 
     ########## Select Second Attribute! 
-    # unique attribute
     unique_1 = unique_attribute(train_attribute)
-    # separate train_attribute depends on choosen first attribute
     attribute_label_1 = unique_1[choosen_attribute_1].dropna().tolist()
-    # set other features
-    train_attribute_1 = train_attribute
-    train_class_1 = train_class
-    # branching
+    
+    # branching for second attribute
     for i in range(len(attribute_label_1)):
         print("\n--> Selecting 2nd Attribute :: " + str(i + 1) + "th Branches...")
         level_count = level_count + 1
-        divided_class_2, choosen_attribute_2 = branch_decision(i, train_attribute_1, choosen_attribute_1, attribute_label_1, train_class_1)
-        # check able to stop or not
+        divided_class_2, choosen_attribute_2 = branch_decision(i, train_attribute, choosen_attribute_1, attribute_label_1, train_class)
+        
+        # check if we can stop or not
         if choosen_attribute_2 == "zero_entropy":
-            # input decision tree using pd.concat
-            decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0':column_name_1,'level_1': [attribute_label_1[i]], 'level_2': [divided_class_2.iloc[0]]})], ignore_index=True)
+            # Use the process_branch function to handle appending the data to decision tree
+            decision_tree = process_branch(decision_tree, column_name_1, attribute_label_1, i, choosen_attribute_2, divided_class_2)
         else:
-            # Select Third Attribute! 
+            # Select Third Attribute!
             print("\n--> Selecting 3rd Attribute...")
-            level_count = level_count + 1
-            # unique attribute
             unique_2 = unique_attribute(train_attribute)
-            # separate train_attribute depends on choosen second attribute
             attribute_label_2 = unique_2[choosen_attribute_2].dropna().tolist()
-            # set other features
-            train_attribute_2 = train_attribute
-            train_class_2 = train_class
-            # branching
+            
+            # branching for third attribute
             for j in range(len(attribute_label_2)):
-                divided_class_3, branch_attribute_3 = branch_decision(j, train_attribute_2, choosen_attribute_2, attribute_label_2, train_class_2)
-                # check able to stop or not
+                divided_class_3, branch_attribute_3 = branch_decision(j, train_attribute, choosen_attribute_2, attribute_label_2, train_class)
+                
+                # check if we can stop or not
                 if branch_attribute_3 == "zero_entropy":
-                    # input decision tree using pd.concat
-                    decision_tree = pd.concat([decision_tree, pd.DataFrame({'level_0':column_name_1,'level_1':[attribute_label_1[i]],'level_2': [attribute_label_2[j]], 'level_3': [divided_class_3.iloc[0]]})], ignore_index=True)
-                    print("\n\n")
-                    print(f"Updated Decision Tree: \n{decision_tree}")
+                    decision_tree = append_to_decision_tree(decision_tree, 
+                                                            ['level_0', 'level_1', 'level_2', 'level_3'], 
+                                                            [column_name_1, attribute_label_1[i], attribute_label_2[j], divided_class_3.iloc[0]])
+
                 else:
                     # Further branching logic can be added as needed
                     pass
 
     print("Final Decision Tree:")
     print(decision_tree)
-
-
 
 # ensures that the main function is executed only.
 if __name__ == "__main__":
