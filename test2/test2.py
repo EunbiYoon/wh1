@@ -1,244 +1,132 @@
-import pandas as pd
 import numpy as np
-import sklearn as sk
+import pandas as pd
+import matplotlib.pyplot as plt
+from collections import Counter
+from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 
-# separate attribute and class in data
-def attribute_class(data):
-    # separate attributes and class
-    attribute_data=data.iloc[:,:-1]
-    class_data=data.iloc[:, -1]
-    return attribute_data, class_data
+# 데이터 로드 및 전처리
+df = pd.read_csv("car.csv")  # 파일 경로 수정 필요
 
-# Prepared train_data, test_data
-def process_dataset():
-    # read csv file
-    car_data = pd.read_csv('car.csv')
+# shuffle data
+df = shuffle(df).reset_index()
 
-    # shuffle the DataFrame
-    ##### 나중에 지우기 랜덤하게 하지 않게 하기 위해서 고정함 random_state=42
-    shuffled_data = sk.utils.shuffle(car_data, random_state=42)
+X = df.iloc[:, :-1]  # 특징 데이터 (6개 속성)
+y = df.iloc[:, -1]   # 라벨 데이터 (클래스)
 
-    # split data with training and testing
-    ##### 나중에 지우기 랜덤하게 하지 않게 하기 위해서 고정함 random_state=42
-    train_data, test_data= sk.model_selection.train_test_split(shuffled_data, test_size=0.2, random_state=42)
-    train_data.to_excel('train_data.xlsx')
-    test_data.to_excel('test_data.xlsx')
-    # reset index both train_data and test_data
-    train_data=train_data.reset_index(drop=True)
-    test_data=test_data.reset_index(drop=True)
+# 범주형 데이터를 숫자로 변환 (LabelEncoder 없이)
+for col in X.columns:
+    X[col] = pd.factorize(X[col])[0]  # 각 범주를 고유 숫자로 변환
+y = pd.factorize(y)[0]  # 클래스 라벨도 숫자로 변환
 
-    # separate attribute <-> class
-    train_attribute, train_class=attribute_class(train_data)
-    test_attribute, test_class=attribute_class(test_data)
+# 엔트로피 계산
+def entropy(y):
+    counts = np.bincount(y)
+    probabilities = counts / len(y)
+    return -np.sum([p * np.log2(p) for p in probabilities if p > 0])
 
-    # message
-    print("Shuffling are done. Split train_data and test_data. Please wait...")
+# 정보 이득 계산
+def information_gain(X, y, feature_idx):
+    base_entropy = entropy(y)
+    values, counts = np.unique(X[:, feature_idx], return_counts=True)
+    weighted_entropy = sum(
+        (counts[i] / np.sum(counts)) * entropy(y[X[:, feature_idx] == v])
+        for i, v in enumerate(values)
+    )
+    return base_entropy - weighted_entropy
 
-    # return final train_data, test_data
-    return car_data, train_attribute, train_class, test_attribute, test_class
+# 트리 노드 생성
+class Node:
+    def __init__(self, feature=None, value=None, left=None, right=None, label=None):
+        self.feature = feature  # 분할 기준 속성
+        self.value = value  # 분할 기준 값
+        self.left = left  # 왼쪽 서브트리
+        self.right = right  # 오른쪽 서브트리
+        self.label = label  # 리프 노드 클래스 값
 
+# 결정 트리 구축
+def build_tree(X, y):
+    if len(set(y)) == 1:
+        return Node(label=y[0])  # 모든 샘플이 동일한 클래스 -> 리프 노드 생성
 
-# get label from each attribute
-def unique_attribute(train_attribute):
-    # reset column name as number
-    train_attribute.columns=list(range(len(train_attribute.columns)))
+    if X.shape[1] == 0:
+        return Node(label=Counter(y).most_common(1)[0][0])  # 속성이 더 없으면 다수 클래스 반환
 
-    # remove duplicate and put the column into unique_attribute_table
-    unique_attributes_table=pd.DataFrame()
-    for i in range(len(train_attribute.columns)):
-        remove_duplicate=train_attribute[i].drop_duplicates().reset_index(drop=True)
-        unique_attributes_table[i]=remove_duplicate
-    return unique_attributes_table
+    # 최적의 속성 찾기
+    gains = [information_gain(X, y, i) for i in range(X.shape[1])]
+    best_feature = np.argmax(gains)
 
-# entropy formula
-def entropy_formula(data_series):
-    # count original_data label 
-    class_count = data_series.value_counts()
+    if gains[best_feature] == 0:
+        return Node(label=Counter(y).most_common(1)[0][0])  # 정보 이득이 없으면 다수 클래스 반환
 
-    # calculate probability 
-    total_count = len(data_series)
-    prob_list = class_count / total_count
+    root = Node(feature=best_feature)
+    values = np.unique(X[:, best_feature])
 
-    # Filter out probabilities that are zero (since log2(0) is undefined)
-    prob_valid = prob_list[prob_list > 0]  
+    for v in values:
+        sub_X = X[X[:, best_feature] == v]
+        sub_y = y[X[:, best_feature] == v]
 
-    # calculate entropy
-    entropy = -np.sum(prob_valid * np.log2(prob_valid))
-    
-    return entropy
+        if len(sub_X) == 0:
+            continue
 
+        child = build_tree(sub_X, sub_y)
+        if v == values[0]:  # 왼쪽 자식
+            root.left = child
+        else:  # 오른쪽 자식
+            root.right = child
 
-# create entropy logic
-def entropy_logic(train_class, train_attribute, branch_info):
-    # original entropy calculate
-    original_entropy=entropy_formula(train_class)
-        
-    # unique attribute
-    unique_attributes_table=unique_attribute(train_attribute)
+    return root
 
-    ##### other etropy #####
-    other_entropy=pd.DataFrame()
-    attribute_count=pd.DataFrame()
-    for i in range(len(unique_attributes_table.columns)):
-        for j in range(len(unique_attributes_table.index)):
-            # find unique values in each attribute
-            unique_value=unique_attributes_table.at[j,i]
-            
-            # filtered data same as unique_vlaue in each attribute
-            filtered_attribute = train_attribute[train_attribute[i]==unique_value]
-
-            # find sorted data index
-            filtered_index=filtered_attribute.index
-            
-            # find class label usign sorted data index
-            filtered_class=train_class[filtered_index]
-
-            # calculate entropy
-            other_entropy.at[j,i]=entropy_formula(filtered_class)
-            
-            # count entropy
-            attribute_count.at[j,i]=len(filtered_index)
-    
-    # if there is all 0 entropy, stop the branching
-    if (other_entropy==0).all().all():
-        print("[[ Entropy Table ==> Zero Entropy ]]")
-        return "zero_entropy"
-    
-    # change all the components as integer
-    attribute_count=attribute_count.fillna(0).astype(int)
-
-    # add sum at the botton of attribute_count
-    attribute_count.loc['total_count_sum']=attribute_count.sum()
-
-    # check each attribute sum are all the same
-    sum_row = attribute_count.iloc[-1]
-    if np.all(sum_row == sum_row[0]):  
-        sum_count=sum_row[0]
+# 예측 함수
+def predict(tree, sample):
+    if tree.label is not None:
+        return tree.label
+    if sample[tree.feature] == 0:
+        return predict(tree.left, sample)
     else:
-        print("error - check attribute_count table")
+        return predict(tree.right, sample)
 
+# 모델 평가 함수
+def evaluate(X_train, y_train, X_test, y_test):
+    tree = build_tree(X_train, y_train)
+    y_train_pred = np.array([predict(tree, x) for x in X_train])
+    y_test_pred = np.array([predict(tree, x) for x in X_test])
 
-    # divide each count by sum
-    weighted_entropy=attribute_count.div(sum_count)
-
-    # attribute_count_prob x other_entropy
-    other_entropy_final=pd.DataFrame()
-    for i in range(len(other_entropy)):
-        for j in range(len(other_entropy.columns)):
-            other_entropy_final.at[i,j]=other_entropy.at[i,j]*weighted_entropy.at[i,j]
+    train_accuracy = np.mean(y_train_pred == y_train)
+    test_accuracy = np.mean(y_test_pred == y_test)
     
-    # add sum 
-    other_entropy_final.loc['weight_entropy_sum']=other_entropy_final.sum()
+    return train_accuracy, test_accuracy
 
-    # calculate information gain
-    other_entropy_final.loc['information_gain']=original_entropy-other_entropy_final.loc['weight_entropy_sum']
+# 실험 수행 (100회)
+train_accuracies, test_accuracies = [], []
 
-    # choose lowest information gain attribute for decision tree
-    max_entropy_attribute=other_entropy_final.loc['information_gain'].idxmax()
+for _ in range(100):
+    X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.2, shuffle=True)
+    train_acc, test_acc = evaluate(X_train, y_train, X_test, y_test)
+    train_accuracies.append(train_acc)
+    test_accuracies.append(test_acc)
 
-    # print entropy_table
-    print("[[ Entropy Table ==> Choosen Attribute = "+str(max_entropy_attribute)+"th Column ]]")
-    print(other_entropy_final)
+# 결과 시각화
+plt.figure(figsize=(12, 5))
 
-    # save entropy_table
-    other_entropy_final.to_excel('entropy_table_'+str(branch_info)+'.xlsx')
+plt.subplot(1, 2, 1)
+plt.hist(train_accuracies, bins=10, edgecolor='black', alpha=0.7)
+plt.xlabel("Accuracy on Training Data")
+plt.ylabel("Frequency")
+plt.title("Training Accuracy Distribution")
 
-    # return max_entropy_attribute
-    return max_entropy_attribute
+plt.subplot(1, 2, 2)
+plt.hist(test_accuracies, bins=10, edgecolor='black', alpha=0.7)
+plt.xlabel("Accuracy on Testing Data")
+plt.ylabel("Frequency")
+plt.title("Testing Accuracy Distribution")
 
-def branch_decision(count, train_attribute, choosen_attribute, attribute_label, train_class):
-    print("====> "+str(count+1)+"th Branch :: Data Sorting...")
-    # divide attribute based on the first_attribute_column
-    divided_attribute=train_attribute[train_attribute[choosen_attribute]==attribute_label[count]]
-    # remove choosen attribute column
-    divided_attribute=divided_attribute.drop(columns=choosen_attribute)
-    # sorted index list from divided_attribute
-    index_class=divided_attribute.index.tolist()
-    # get the following class
-    divided_class = train_class.loc[index_class]
+plt.tight_layout()
+plt.savefig('accuracy_histogram.png')
 
-    # message
-    print("====> "+str(count+1)+"th Branch :: Entropy Calculating...")
-    # choose first attribute to sort
-    branch_attribute=entropy_logic(divided_class, divided_attribute,2)
-    
-    return divided_class, branch_attribute
+# 평균 및 표준편차 출력
+train_mean, train_std = np.mean(train_accuracies), np.std(train_accuracies)
+test_mean, test_std = np.mean(test_accuracies), np.std(test_accuracies)
 
-
-
-# draw graph
-def draw_graph():
-    return 4
-
-
-
-def append_to_decision_tree(decision_tree, column_names, values):
-    """This function appends a row to the decision tree DataFrame."""
-    new_row = {column_names[i]: values[i] for i in range(len(column_names))}
-    return pd.concat([decision_tree, pd.DataFrame([new_row])], ignore_index=True)
-
-def process_branch(decision_tree, column_name_1, attribute_label_1, i, choosen_attribute_2, divided_class_2):
-    """This function handles the branch decision and appends data to the decision tree."""
-    # Append the result to decision tree
-    decision_tree = append_to_decision_tree(decision_tree, 
-                                            ['level_0', 'level_1', 'level_2'], 
-                                            [column_name_1, attribute_label_1[i], divided_class_2.iloc[0]])
-    return decision_tree
-
-def main():
-    # preprocess data
-    car_data, train_attribute, train_class, test_attribute, test_class = process_dataset()
-
-    # build_tree
-    decision_tree = pd.DataFrame()
-
-    ######### training data ########
-    ########## Select First Attribute! 
-    print("\n--> Selecting 1st Attribute...")
-    level_count = 0
-    choosen_attribute_1 = entropy_logic(train_class, train_attribute, 1)
-    column_name_1 = car_data.columns[choosen_attribute_1]
-    decision_tree = append_to_decision_tree(decision_tree, ['level_0'], [column_name_1])
-
-    ########## Select Second Attribute! 
-    unique_1 = unique_attribute(train_attribute)
-    attribute_label_1 = unique_1[choosen_attribute_1].dropna().tolist()
-    
-    # branching for second attribute
-    for i in range(len(attribute_label_1)):
-        print("\n--> Selecting 2nd Attribute :: " + str(i + 1) + "th Branches...")
-        level_count = level_count + 1
-        divided_class_2, choosen_attribute_2 = branch_decision(i, train_attribute, choosen_attribute_1, attribute_label_1, train_class)
-        
-        # check if we can stop or not
-        if choosen_attribute_2 == "zero_entropy":
-            # Use the process_branch function to handle appending the data to decision tree
-            decision_tree = process_branch(decision_tree, column_name_1, attribute_label_1, i, choosen_attribute_2, divided_class_2)
-        else:
-            # Select Third Attribute!
-            print("\n--> Selecting 3rd Attribute...")
-            unique_2 = unique_attribute(train_attribute)
-            attribute_label_2 = unique_2[choosen_attribute_2].dropna().tolist()
-            
-            # branching for third attribute
-            for j in range(len(attribute_label_2)):
-                divided_class_3, branch_attribute_3 = branch_decision(j, train_attribute, choosen_attribute_2, attribute_label_2, train_class)
-                
-                # check if we can stop or not
-                if branch_attribute_3 == "zero_entropy":
-                    decision_tree = append_to_decision_tree(decision_tree, 
-                                                            ['level_0', 'level_1', 'level_2', 'level_3'], 
-                                                            [column_name_1, attribute_label_1[i], attribute_label_2[j], divided_class_3.iloc[0]])
-
-                else:
-                    # Further branching logic can be added as needed
-                    pass
-
-    print("Final Decision Tree:")
-    print(decision_tree)
-
-# ensures that the main function is executed only.
-# check update
-if __name__ == "__main__":
-    main()
-
+print(f"Training Accuracy: Mean = {train_mean:.4f}, Std = {train_std:.4f}")
+print(f"Testing Accuracy: Mean = {test_mean:.4f}, Std = {test_std:.4f}")
