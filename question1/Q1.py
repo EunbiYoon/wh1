@@ -32,8 +32,8 @@ def process_dataset():
     # reset index both train_data and test_data
     train_data=train_data.reset_index(drop=True)
     test_data=test_data.reset_index(drop=True)
-    train_data.to_excel('train_data.xlsx')
-    test_data.to_excel('test_data.xlsx')
+    #train_data.to_excel('train_data.xlsx')
+    #test_data.to_excel('test_data.xlsx')
     # message
     print("--> Shuffled data and split train and test dataset...")
 
@@ -193,9 +193,12 @@ def draw_graph(accuracy_table, title):
     )
 
     # formatting 
-    plt.xlabel("Value of k")
-    plt.ylabel("Accuracy over "+title)
-    plt.title(title)
+    plt.xlabel("(Value of k)")
+    plt.ylabel("(Accuracy over "+title+" data")
+    if title=="training":
+        plt.title("[Figure 1]")
+    if title=="testing":
+        plt.title("[Figure 2]")
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
 
     # message
@@ -218,21 +221,21 @@ def main():
         # make euclidean matrix 
         train_euclidean=euclidean_matrix(train_attribute, train_attribute, "train")
         test_euclidean=euclidean_matrix(train_attribute, test_attribute, "test")
-        train_euclidean.to_excel('train_euclidean.xlsx')
-        test_euclidean.to_excel('test_euclidean.xlsx')
+        #train_euclidean.to_excel('train_euclidean.xlsx')
+        #test_euclidean.to_excel('test_euclidean.xlsx')
 
         # knn algoritm
         train_accuracy=knn_algorithm(51, train_euclidean, train_class, train_class, "train", try_count, train_accuracy)
-        train_accuracy.to_excel("test_accuracy.xlsx")
+        #train_accuracy.to_excel("test_accuracy.xlsx")
         test_accuracy=knn_algorithm(51, test_euclidean, train_class, test_class, "test", try_count, test_accuracy)
-        test_accuracy.to_excel("test_accuracy.xlsx")
+        #test_accuracy.to_excel("test_accuracy.xlsx")
 
     # draw graph
     train_graph_table=accuracy_avg_std(train_accuracy, "train_data")
-    draw_graph(train_graph_table,"train_dataset")
+    draw_graph(train_graph_table,"training")
 
     test_graph_table=accuracy_avg_std(test_accuracy, "test_data")
-    draw_graph(test_graph_table,"test_dataset")
+    draw_graph(test_graph_table,"testing")
 
     # message
     print("\n[[ Complete task! ]]\n")
