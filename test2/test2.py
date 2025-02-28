@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+from graphviz import Digraph
 
 # 데이터 로드 및 전처리
 df = pd.read_csv("car.csv")  # 파일 경로 수정 필요
 
 # shuffle data
 df = shuffle(df).reset_index()
+print(df)
 
 X = df.iloc[:, :-1]  # 특징 데이터 (6개 속성)
 y = df.iloc[:, -1]   # 라벨 데이터 (클래스)
@@ -18,6 +20,10 @@ y = df.iloc[:, -1]   # 라벨 데이터 (클래스)
 for col in X.columns:
     X[col] = pd.factorize(X[col])[0]  # 각 범주를 고유 숫자로 변환
 y = pd.factorize(y)[0]  # 클래스 라벨도 숫자로 변환
+print("y")
+print(y)
+print("X")
+print(X)
 
 # 엔트로피 계산
 def entropy(y):
@@ -47,9 +53,11 @@ class Node:
 # 결정 트리 구축
 def build_tree(X, y):
     if len(set(y)) == 1:
+        print(y[0])
         return Node(label=y[0])  # 모든 샘플이 동일한 클래스 -> 리프 노드 생성
 
     if X.shape[1] == 0:
+        print(Counter(y).most_common(1)[0][0])
         return Node(label=Counter(y).most_common(1)[0][0])  # 속성이 더 없으면 다수 클래스 반환
 
     # 최적의 속성 찾기
@@ -57,6 +65,7 @@ def build_tree(X, y):
     best_feature = np.argmax(gains)
 
     if gains[best_feature] == 0:
+        print(Counter(y).most_common(1)[0][0])
         return Node(label=Counter(y).most_common(1)[0][0])  # 정보 이득이 없으면 다수 클래스 반환
 
     root = Node(feature=best_feature)
@@ -89,6 +98,7 @@ def predict(tree, sample):
 # 모델 평가 함수
 def evaluate(X_train, y_train, X_test, y_test):
     tree = build_tree(X_train, y_train)
+
     y_train_pred = np.array([predict(tree, x) for x in X_train])
     y_test_pred = np.array([predict(tree, x) for x in X_test])
 
@@ -100,11 +110,13 @@ def evaluate(X_train, y_train, X_test, y_test):
 # 실험 수행 (100회)
 train_accuracies, test_accuracies = [], []
 
-for _ in range(100):
+for _ in range(2):
     X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.2, shuffle=True)
     train_acc, test_acc = evaluate(X_train, y_train, X_test, y_test)
     train_accuracies.append(train_acc)
     test_accuracies.append(test_acc)
+    print("num"+str(_))
+    
 
 # 결과 시각화
 plt.figure(figsize=(12, 5))
@@ -127,6 +139,8 @@ plt.savefig('accuracy_histogram.png')
 # 평균 및 표준편차 출력
 train_mean, train_std = np.mean(train_accuracies), np.std(train_accuracies)
 test_mean, test_std = np.mean(test_accuracies), np.std(test_accuracies)
+
+
 
 print(f"Training Accuracy: Mean = {train_mean:.4f}, Std = {train_std:.4f}")
 print(f"Testing Accuracy: Mean = {test_mean:.4f}, Std = {test_std:.4f}")
