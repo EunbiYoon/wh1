@@ -1,368 +1,43 @@
 {
     "feature": "safety_level",
     "children": {
+        "low": {
+            "label": "unacceptable"
+        },
         "medium": {
             "feature": "capacity",
             "children": {
-                "two": {
-                    "label": "unacceptable"
-                },
-                "5_or_more": {
-                    "feature": "buying_price",
-                    "children": {
-                        "high": {
-                            "feature": "luggage_boot_size",
-                            "children": {
-                                "large": {
-                                    "feature": "maintenance_price",
-                                    "children": {
-                                        "medium": {
-                                            "label": "acceptable"
-                                        },
-                                        "very_high": {
-                                            "label": "unacceptable"
-                                        },
-                                        "low": {
-                                            "label": "acceptable"
-                                        },
-                                        "high": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "small": {
-                                    "label": "unacceptable"
-                                },
-                                "medium": {
-                                    "feature": "number_doors",
-                                    "children": {
-                                        "5_or_more": {
-                                            "feature": "maintenance_price",
-                                            "children": {
-                                                "high": {
-                                                    "label": "acceptable"
-                                                },
-                                                "low": {
-                                                    "label": "acceptable"
-                                                },
-                                                "medium": {
-                                                    "label": "acceptable"
-                                                },
-                                                "very_high": {
-                                                    "label": "unacceptable"
-                                                }
-                                            }
-                                        },
-                                        "three": {
-                                            "feature": "maintenance_price",
-                                            "children": {
-                                                "low": {
-                                                    "label": "acceptable"
-                                                },
-                                                "very_high": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "high": {
-                                                    "label": "acceptable"
-                                                },
-                                                "medium": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "two": {
-                                            "label": "unacceptable"
-                                        },
-                                        "four": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "very_high": {
-                            "feature": "maintenance_price",
-                            "children": {
-                                "medium": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "small": {
-                                            "label": "unacceptable"
-                                        },
-                                        "large": {
-                                            "label": "acceptable"
-                                        },
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "low": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "small": {
-                                            "label": "unacceptable"
-                                        },
-                                        "large": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "very_high": {
-                                    "label": "unacceptable"
-                                },
-                                "high": {
-                                    "label": "unacceptable"
-                                }
-                            }
-                        },
-                        "low": {
-                            "feature": "luggage_boot_size",
-                            "children": {
-                                "small": {
-                                    "feature": "maintenance_price",
-                                    "children": {
-                                        "high": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                },
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                }
-                                            }
-                                        },
-                                        "low": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "very_high": {
-                                            "label": "unacceptable"
-                                        }
-                                    }
-                                },
-                                "medium": {
-                                    "feature": "maintenance_price",
-                                    "children": {
-                                        "very_high": {
-                                            "label": "acceptable"
-                                        },
-                                        "medium": {
-                                            "label": "good"
-                                        },
-                                        "high": {
-                                            "label": "acceptable"
-                                        },
-                                        "low": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "acceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "good"
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "large": {
-                                    "feature": "maintenance_price",
-                                    "children": {
-                                        "medium": {
-                                            "label": "good"
-                                        },
-                                        "high": {
-                                            "label": "acceptable"
-                                        },
-                                        "low": {
-                                            "label": "good"
-                                        },
-                                        "very_high": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "medium": {
-                            "feature": "maintenance_price",
-                            "children": {
-                                "low": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "acceptable"
-                                                },
-                                                "four": {
-                                                    "label": "good"
-                                                },
-                                                "three": {
-                                                    "label": "good"
-                                                }
-                                            }
-                                        },
-                                        "large": {
-                                            "label": "good"
-                                        },
-                                        "small": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "very_high": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "small": {
-                                            "label": "unacceptable"
-                                        },
-                                        "large": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "high": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "large": {
-                                            "label": "acceptable"
-                                        },
-                                        "medium": {
-                                            "label": "acceptable"
-                                        },
-                                        "small": {
-                                            "label": "unacceptable"
-                                        }
-                                    }
-                                },
-                                "medium": {
-                                    "label": "acceptable"
-                                }
-                            }
-                        }
-                    }
-                },
                 "four": {
                     "feature": "buying_price",
                     "children": {
                         "medium": {
                             "feature": "maintenance_price",
                             "children": {
-                                "medium": {
-                                    "label": "acceptable"
-                                },
-                                "low": {
-                                    "feature": "number_doors",
+                                "high": {
+                                    "feature": "luggage_boot_size",
                                     "children": {
-                                        "two": {
+                                        "large": {
                                             "label": "acceptable"
                                         },
-                                        "four": {
-                                            "feature": "luggage_boot_size",
+                                        "medium": {
+                                            "feature": "number_doors",
                                             "children": {
-                                                "large": {
-                                                    "label": "good"
+                                                "two": {
+                                                    "label": "unacceptable"
                                                 },
-                                                "medium": {
-                                                    "label": "good"
+                                                "three": {
+                                                    "label": "unacceptable"
                                                 },
-                                                "small": {
+                                                "four": {
+                                                    "label": "acceptable"
+                                                },
+                                                "5_or_more": {
                                                     "label": "acceptable"
                                                 }
                                             }
                                         },
-                                        "three": {
-                                            "label": "acceptable"
-                                        },
-                                        "5_or_more": {
-                                            "label": "acceptable"
+                                        "small": {
+                                            "label": "unacceptable"
                                         }
                                     }
                                 },
@@ -372,44 +47,53 @@
                                         "small": {
                                             "label": "unacceptable"
                                         },
-                                        "large": {
-                                            "label": "acceptable"
-                                        },
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                },
                                                 "two": {
                                                     "label": "unacceptable"
                                                 },
-                                                "four": {
+                                                "three": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "5_or_more": {
                                                     "label": "acceptable"
                                                 }
                                             }
+                                        },
+                                        "large": {
+                                            "label": "acceptable"
                                         }
                                     }
                                 },
-                                "high": {
+                                "medium": {
+                                    "label": "acceptable"
+                                },
+                                "low": {
                                     "feature": "luggage_boot_size",
                                     "children": {
                                         "large": {
-                                            "label": "acceptable"
-                                        },
-                                        "small": {
-                                            "label": "unacceptable"
+                                            "label": "good"
                                         },
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
                                                 "four": {
+                                                    "label": "good"
+                                                },
+                                                "two": {
+                                                    "label": "acceptable"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                },
+                                                "three": {
                                                     "label": "acceptable"
                                                 }
                                             }
+                                        },
+                                        "small": {
+                                            "label": "acceptable"
                                         }
                                     }
                                 }
@@ -418,34 +102,31 @@
                         "very_high": {
                             "feature": "maintenance_price",
                             "children": {
-                                "very_high": {
-                                    "label": "unacceptable"
-                                },
                                 "high": {
                                     "label": "unacceptable"
                                 },
                                 "medium": {
-                                    "feature": "number_doors",
+                                    "feature": "luggage_boot_size",
                                     "children": {
-                                        "four": {
-                                            "label": "acceptable"
-                                        },
-                                        "two": {
-                                            "label": "unacceptable"
-                                        },
-                                        "three": {
-                                            "feature": "luggage_boot_size",
+                                        "medium": {
+                                            "feature": "number_doors",
                                             "children": {
-                                                "medium": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "large": {
+                                                "four": {
                                                     "label": "acceptable"
                                                 },
-                                                "small": {
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
                                                     "label": "unacceptable"
                                                 }
                                             }
+                                        },
+                                        "large": {
+                                            "label": "acceptable"
+                                        },
+                                        "small": {
+                                            "label": "unacceptable"
                                         }
                                     }
                                 },
@@ -455,13 +136,10 @@
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
                                                 "5_or_more": {
                                                     "label": "acceptable"
                                                 },
-                                                "three": {
+                                                "two": {
                                                     "label": "unacceptable"
                                                 },
                                                 "four": {
@@ -473,6 +151,267 @@
                                             "label": "unacceptable"
                                         },
                                         "large": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "very_high": {
+                                    "label": "unacceptable"
+                                }
+                            }
+                        },
+                        "low": {
+                            "feature": "maintenance_price",
+                            "children": {
+                                "very_high": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "three": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "large": {
+                                            "label": "acceptable"
+                                        },
+                                        "small": {
+                                            "label": "unacceptable"
+                                        }
+                                    }
+                                },
+                                "low": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                },
+                                                "four": {
+                                                    "label": "good"
+                                                },
+                                                "two": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "large": {
+                                            "label": "good"
+                                        },
+                                        "small": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "medium": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "small": {
+                                            "label": "acceptable"
+                                        },
+                                        "large": {
+                                            "label": "good"
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
+                                                "two": {
+                                                    "label": "acceptable"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                },
+                                                "four": {
+                                                    "label": "good"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "high": {
+                                    "label": "acceptable"
+                                }
+                            }
+                        },
+                        "high": {
+                            "feature": "luggage_boot_size",
+                            "children": {
+                                "large": {
+                                    "feature": "maintenance_price",
+                                    "children": {
+                                        "very_high": {
+                                            "label": "unacceptable"
+                                        },
+                                        "low": {
+                                            "label": "acceptable"
+                                        },
+                                        "medium": {
+                                            "label": "acceptable"
+                                        },
+                                        "high": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "medium": {
+                                    "feature": "number_doors",
+                                    "children": {
+                                        "5_or_more": {
+                                            "feature": "maintenance_price",
+                                            "children": {
+                                                "low": {
+                                                    "label": "acceptable"
+                                                },
+                                                "very_high": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "high": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "three": {
+                                            "label": "unacceptable"
+                                        },
+                                        "two": {
+                                            "label": "unacceptable"
+                                        },
+                                        "four": {
+                                            "feature": "maintenance_price",
+                                            "children": {
+                                                "medium": {
+                                                    "label": "acceptable"
+                                                },
+                                                "low": {
+                                                    "label": "acceptable"
+                                                },
+                                                "high": {
+                                                    "label": "acceptable"
+                                                },
+                                                "very_high": {
+                                                    "label": "unacceptable"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "small": {
+                                    "label": "unacceptable"
+                                }
+                            }
+                        }
+                    }
+                },
+                "two": {
+                    "label": "unacceptable"
+                },
+                "5_or_more": {
+                    "feature": "buying_price",
+                    "children": {
+                        "medium": {
+                            "feature": "luggage_boot_size",
+                            "children": {
+                                "large": {
+                                    "feature": "maintenance_price",
+                                    "children": {
+                                        "medium": {
+                                            "label": "acceptable"
+                                        },
+                                        "very_high": {
+                                            "label": "acceptable"
+                                        },
+                                        "high": {
+                                            "label": "acceptable"
+                                        },
+                                        "low": {
+                                            "label": "good"
+                                        }
+                                    }
+                                },
+                                "small": {
+                                    "feature": "maintenance_price",
+                                    "children": {
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "low": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "very_high": {
+                                            "label": "unacceptable"
+                                        },
+                                        "high": {
+                                            "label": "unacceptable"
+                                        }
+                                    }
+                                },
+                                "medium": {
+                                    "feature": "maintenance_price",
+                                    "children": {
+                                        "very_high": {
+                                            "label": "acceptable"
+                                        },
+                                        "high": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "low": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                },
+                                                "two": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "medium": {
                                             "label": "acceptable"
                                         }
                                     }
@@ -485,22 +424,33 @@
                                 "small": {
                                     "label": "unacceptable"
                                 },
+                                "large": {
+                                    "feature": "maintenance_price",
+                                    "children": {
+                                        "high": {
+                                            "label": "acceptable"
+                                        },
+                                        "medium": {
+                                            "label": "acceptable"
+                                        },
+                                        "low": {
+                                            "label": "acceptable"
+                                        },
+                                        "very_high": {
+                                            "label": "unacceptable"
+                                        }
+                                    }
+                                },
                                 "medium": {
                                     "feature": "number_doors",
                                     "children": {
                                         "three": {
-                                            "label": "unacceptable"
-                                        },
-                                        "5_or_more": {
                                             "feature": "maintenance_price",
                                             "children": {
                                                 "low": {
                                                     "label": "acceptable"
                                                 },
                                                 "high": {
-                                                    "label": "acceptable"
-                                                },
-                                                "medium": {
                                                     "label": "acceptable"
                                                 },
                                                 "very_high": {
@@ -513,23 +463,23 @@
                                         },
                                         "four": {
                                             "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "large": {
-                                    "feature": "maintenance_price",
-                                    "children": {
-                                        "medium": {
-                                            "label": "acceptable"
                                         },
-                                        "high": {
-                                            "label": "acceptable"
-                                        },
-                                        "very_high": {
-                                            "label": "unacceptable"
-                                        },
-                                        "low": {
-                                            "label": "acceptable"
+                                        "5_or_more": {
+                                            "feature": "maintenance_price",
+                                            "children": {
+                                                "medium": {
+                                                    "label": "acceptable"
+                                                },
+                                                "low": {
+                                                    "label": "acceptable"
+                                                },
+                                                "high": {
+                                                    "label": "acceptable"
+                                                },
+                                                "very_high": {
+                                                    "label": "unacceptable"
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -538,54 +488,26 @@
                         "low": {
                             "feature": "maintenance_price",
                             "children": {
-                                "high": {
-                                    "label": "acceptable"
-                                },
-                                "low": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "5_or_more": {
-                                                    "label": "good"
-                                                },
-                                                "three": {
-                                                    "label": "acceptable"
-                                                },
-                                                "four": {
-                                                    "label": "good"
-                                                },
-                                                "two": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "large": {
-                                            "label": "good"
-                                        },
-                                        "small": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
                                 "very_high": {
                                     "feature": "luggage_boot_size",
                                     "children": {
-                                        "large": {
-                                            "label": "acceptable"
-                                        },
                                         "small": {
                                             "label": "unacceptable"
+                                        },
+                                        "large": {
+                                            "label": "acceptable"
                                         },
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
                                                 "four": {
                                                     "label": "acceptable"
                                                 },
-                                                "two": {
-                                                    "label": "unacceptable"
+                                                "three": {
+                                                    "label": "acceptable"
                                                 },
                                                 "5_or_more": {
                                                     "label": "acceptable"
@@ -597,14 +519,167 @@
                                 "medium": {
                                     "feature": "luggage_boot_size",
                                     "children": {
-                                        "small": {
-                                            "label": "acceptable"
+                                        "large": {
+                                            "label": "good"
                                         },
                                         "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "two": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
+                                                    "label": "good"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                },
+                                                "four": {
+                                                    "label": "good"
+                                                }
+                                            }
+                                        },
+                                        "small": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "high": {
+                                    "feature": "number_doors",
+                                    "children": {
+                                        "two": {
+                                            "feature": "luggage_boot_size",
+                                            "children": {
+                                                "small": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "medium": {
+                                                    "label": "acceptable"
+                                                },
+                                                "large": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "5_or_more": {
                                             "label": "acceptable"
+                                        },
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "low": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "small": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                },
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                }
+                                            }
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "four": {
+                                                    "label": "good"
+                                                },
+                                                "three": {
+                                                    "label": "good"
+                                                },
+                                                "two": {
+                                                    "label": "acceptable"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "good"
+                                                }
+                                            }
                                         },
                                         "large": {
                                             "label": "good"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "very_high": {
+                            "feature": "maintenance_price",
+                            "children": {
+                                "low": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "small": {
+                                            "label": "unacceptable"
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                }
+                                            }
+                                        },
+                                        "large": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "high": {
+                                    "label": "unacceptable"
+                                },
+                                "very_high": {
+                                    "label": "unacceptable"
+                                },
+                                "medium": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "large": {
+                                            "label": "acceptable"
+                                        },
+                                        "small": {
+                                            "label": "unacceptable"
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -620,106 +695,6 @@
                 "5_or_more": {
                     "feature": "buying_price",
                     "children": {
-                        "medium": {
-                            "feature": "maintenance_price",
-                            "children": {
-                                "high": {
-                                    "label": "acceptable"
-                                },
-                                "very_high": {
-                                    "feature": "number_doors",
-                                    "children": {
-                                        "three": {
-                                            "label": "acceptable"
-                                        },
-                                        "two": {
-                                            "feature": "luggage_boot_size",
-                                            "children": {
-                                                "small": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "large": {
-                                                    "label": "acceptable"
-                                                },
-                                                "medium": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "four": {
-                                            "label": "acceptable"
-                                        },
-                                        "5_or_more": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "low": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "large": {
-                                            "label": "very_good"
-                                        },
-                                        "small": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "good"
-                                                },
-                                                "three": {
-                                                    "label": "good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "good"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                }
-                                            }
-                                        },
-                                        "medium": {
-                                            "label": "very_good"
-                                        }
-                                    }
-                                },
-                                "medium": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "small": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                },
-                                                "four": {
-                                                    "label": "acceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "acceptable"
-                                                }
-                                            }
-                                        },
-                                        "large": {
-                                            "label": "very_good"
-                                        },
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "three": {
-                                                    "label": "very_good"
-                                                },
-                                                "two": {
-                                                    "label": "acceptable"
-                                                },
-                                                "four": {
-                                                    "label": "very_good"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "very_high": {
                             "feature": "maintenance_price",
                             "children": {
@@ -741,9 +716,6 @@
                                         "two": {
                                             "feature": "luggage_boot_size",
                                             "children": {
-                                                "medium": {
-                                                    "label": "acceptable"
-                                                },
                                                 "small": {
                                                     "label": "unacceptable"
                                                 },
@@ -757,28 +729,28 @@
                                 "low": {
                                     "feature": "number_doors",
                                     "children": {
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
                                         "5_or_more": {
                                             "label": "acceptable"
                                         },
-                                        "four": {
+                                        "three": {
                                             "label": "acceptable"
                                         },
                                         "two": {
                                             "feature": "luggage_boot_size",
                                             "children": {
-                                                "small": {
-                                                    "label": "unacceptable"
+                                                "large": {
+                                                    "label": "acceptable"
                                                 },
                                                 "medium": {
                                                     "label": "acceptable"
                                                 },
-                                                "large": {
-                                                    "label": "acceptable"
+                                                "small": {
+                                                    "label": "unacceptable"
                                                 }
                                             }
-                                        },
-                                        "three": {
-                                            "label": "acceptable"
                                         }
                                     }
                                 },
@@ -787,21 +759,48 @@
                                 }
                             }
                         },
-                        "high": {
+                        "medium": {
                             "feature": "maintenance_price",
                             "children": {
+                                "low": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "large": {
+                                            "label": "very_good"
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "four": {
+                                                    "label": "very_good"
+                                                },
+                                                "two": {
+                                                    "label": "good"
+                                                }
+                                            }
+                                        },
+                                        "small": {
+                                            "label": "good"
+                                        }
+                                    }
+                                },
                                 "medium": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "large": {
+                                            "label": "very_good"
+                                        },
+                                        "medium": {
+                                            "label": "very_good"
+                                        },
+                                        "small": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "high": {
                                     "feature": "number_doors",
                                     "children": {
-                                        "three": {
-                                            "label": "acceptable"
-                                        },
-                                        "5_or_more": {
-                                            "label": "acceptable"
-                                        },
-                                        "four": {
-                                            "label": "acceptable"
-                                        },
                                         "two": {
                                             "feature": "luggage_boot_size",
                                             "children": {
@@ -810,6 +809,76 @@
                                                 },
                                                 "medium": {
                                                     "label": "acceptable"
+                                                },
+                                                "large": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "5_or_more": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "very_high": {
+                                    "feature": "number_doors",
+                                    "children": {
+                                        "two": {
+                                            "feature": "luggage_boot_size",
+                                            "children": {
+                                                "medium": {
+                                                    "label": "acceptable"
+                                                },
+                                                "small": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "large": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
+                                            "label": "acceptable"
+                                        },
+                                        "5_or_more": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "high": {
+                            "feature": "maintenance_price",
+                            "children": {
+                                "very_high": {
+                                    "label": "unacceptable"
+                                },
+                                "low": {
+                                    "feature": "number_doors",
+                                    "children": {
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "5_or_more": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
+                                            "label": "acceptable"
+                                        },
+                                        "two": {
+                                            "feature": "luggage_boot_size",
+                                            "children": {
+                                                "small": {
+                                                    "label": "unacceptable"
                                                 },
                                                 "large": {
                                                     "label": "acceptable"
@@ -821,10 +890,7 @@
                                 "high": {
                                     "feature": "number_doors",
                                     "children": {
-                                        "three": {
-                                            "label": "acceptable"
-                                        },
-                                        "four": {
+                                        "5_or_more": {
                                             "label": "acceptable"
                                         },
                                         "two": {
@@ -838,39 +904,36 @@
                                                 }
                                             }
                                         },
-                                        "5_or_more": {
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
                                             "label": "acceptable"
                                         }
                                     }
                                 },
-                                "very_high": {
-                                    "label": "unacceptable"
-                                },
-                                "low": {
+                                "medium": {
                                     "feature": "number_doors",
                                     "children": {
+                                        "four": {
+                                            "label": "acceptable"
+                                        },
+                                        "5_or_more": {
+                                            "label": "acceptable"
+                                        },
                                         "three": {
                                             "label": "acceptable"
                                         },
                                         "two": {
                                             "feature": "luggage_boot_size",
                                             "children": {
-                                                "medium": {
+                                                "large": {
                                                     "label": "acceptable"
                                                 },
                                                 "small": {
                                                     "label": "unacceptable"
-                                                },
-                                                "large": {
-                                                    "label": "acceptable"
                                                 }
                                             }
-                                        },
-                                        "5_or_more": {
-                                            "label": "acceptable"
-                                        },
-                                        "four": {
-                                            "label": "acceptable"
                                         }
                                     }
                                 }
@@ -879,98 +942,6 @@
                         "low": {
                             "feature": "maintenance_price",
                             "children": {
-                                "high": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "small": {
-                                            "label": "acceptable"
-                                        },
-                                        "large": {
-                                            "label": "very_good"
-                                        },
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "four": {
-                                                    "label": "very_good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "very_good"
-                                                },
-                                                "two": {
-                                                    "label": "acceptable"
-                                                },
-                                                "three": {
-                                                    "label": "very_good"
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "very_high": {
-                                    "feature": "number_doors",
-                                    "children": {
-                                        "three": {
-                                            "label": "acceptable"
-                                        },
-                                        "5_or_more": {
-                                            "label": "acceptable"
-                                        },
-                                        "two": {
-                                            "feature": "luggage_boot_size",
-                                            "children": {
-                                                "medium": {
-                                                    "label": "acceptable"
-                                                },
-                                                "small": {
-                                                    "label": "unacceptable"
-                                                }
-                                            }
-                                        },
-                                        "four": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "low": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "small": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "three": {
-                                                    "label": "good"
-                                                },
-                                                "four": {
-                                                    "label": "good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "good"
-                                                },
-                                                "two": {
-                                                    "label": "unacceptable"
-                                                }
-                                            }
-                                        },
-                                        "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "good"
-                                                },
-                                                "three": {
-                                                    "label": "very_good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "very_good"
-                                                }
-                                            }
-                                        },
-                                        "large": {
-                                            "label": "very_good"
-                                        }
-                                    }
-                                },
                                 "medium": {
                                     "feature": "luggage_boot_size",
                                     "children": {
@@ -983,30 +954,108 @@
                                                 "two": {
                                                     "label": "good"
                                                 },
-                                                "four": {
+                                                "5_or_more": {
                                                     "label": "very_good"
                                                 },
-                                                "three": {
+                                                "four": {
                                                     "label": "very_good"
                                                 }
                                             }
                                         },
+                                        "small": {
+                                            "label": "good"
+                                        }
+                                    }
+                                },
+                                "very_high": {
+                                    "feature": "number_doors",
+                                    "children": {
+                                        "two": {
+                                            "feature": "luggage_boot_size",
+                                            "children": {
+                                                "medium": {
+                                                    "label": "acceptable"
+                                                },
+                                                "small": {
+                                                    "label": "unacceptable"
+                                                },
+                                                "large": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "5_or_more": {
+                                            "label": "acceptable"
+                                        },
+                                        "three": {
+                                            "label": "acceptable"
+                                        },
+                                        "four": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "high": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
                                         "small": {
                                             "feature": "number_doors",
                                             "children": {
                                                 "two": {
                                                     "label": "unacceptable"
                                                 },
+                                                "5_or_more": {
+                                                    "label": "acceptable"
+                                                },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
                                                 "four": {
+                                                    "label": "acceptable"
+                                                }
+                                            }
+                                        },
+                                        "medium": {
+                                            "label": "very_good"
+                                        },
+                                        "large": {
+                                            "label": "very_good"
+                                        }
+                                    }
+                                },
+                                "low": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "small": {
+                                            "feature": "number_doors",
+                                            "children": {
+                                                "three": {
                                                     "label": "good"
                                                 },
                                                 "5_or_more": {
                                                     "label": "good"
                                                 },
+                                                "two": {
+                                                    "label": "unacceptable"
+                                                }
+                                            }
+                                        },
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
                                                 "three": {
+                                                    "label": "very_good"
+                                                },
+                                                "four": {
+                                                    "label": "very_good"
+                                                },
+                                                "two": {
                                                     "label": "good"
                                                 }
                                             }
+                                        },
+                                        "large": {
+                                            "label": "very_good"
                                         }
                                     }
                                 }
@@ -1020,7 +1069,10 @@
                         "low": {
                             "feature": "maintenance_price",
                             "children": {
-                                "medium": {
+                                "very_high": {
+                                    "label": "acceptable"
+                                },
+                                "high": {
                                     "feature": "luggage_boot_size",
                                     "children": {
                                         "large": {
@@ -1030,37 +1082,48 @@
                                             "feature": "number_doors",
                                             "children": {
                                                 "two": {
-                                                    "label": "good"
+                                                    "label": "acceptable"
                                                 },
+                                                "three": {
+                                                    "label": "acceptable"
+                                                },
+                                                "5_or_more": {
+                                                    "label": "very_good"
+                                                },
+                                                "four": {
+                                                    "label": "very_good"
+                                                }
+                                            }
+                                        },
+                                        "small": {
+                                            "label": "acceptable"
+                                        }
+                                    }
+                                },
+                                "medium": {
+                                    "feature": "luggage_boot_size",
+                                    "children": {
+                                        "medium": {
+                                            "feature": "number_doors",
+                                            "children": {
                                                 "5_or_more": {
                                                     "label": "very_good"
                                                 },
                                                 "three": {
                                                     "label": "good"
+                                                },
+                                                "four": {
+                                                    "label": "very_good"
                                                 }
                                             }
+                                        },
+                                        "large": {
+                                            "label": "very_good"
                                         },
                                         "small": {
                                             "label": "good"
                                         }
                                     }
-                                },
-                                "high": {
-                                    "feature": "luggage_boot_size",
-                                    "children": {
-                                        "small": {
-                                            "label": "acceptable"
-                                        },
-                                        "large": {
-                                            "label": "very_good"
-                                        },
-                                        "medium": {
-                                            "label": "acceptable"
-                                        }
-                                    }
-                                },
-                                "very_high": {
-                                    "label": "acceptable"
                                 },
                                 "low": {
                                     "feature": "luggage_boot_size",
@@ -1072,21 +1135,7 @@
                                             "label": "good"
                                         },
                                         "medium": {
-                                            "feature": "number_doors",
-                                            "children": {
-                                                "two": {
-                                                    "label": "good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "very_good"
-                                                },
-                                                "four": {
-                                                    "label": "very_good"
-                                                },
-                                                "three": {
-                                                    "label": "good"
-                                                }
-                                            }
+                                            "label": "good"
                                         }
                                     }
                                 }
@@ -1095,31 +1144,28 @@
                         "medium": {
                             "feature": "maintenance_price",
                             "children": {
-                                "very_high": {
-                                    "label": "acceptable"
-                                },
                                 "low": {
                                     "feature": "luggage_boot_size",
                                     "children": {
-                                        "small": {
-                                            "label": "good"
-                                        },
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
                                                 "three": {
                                                     "label": "good"
                                                 },
+                                                "5_or_more": {
+                                                    "label": "very_good"
+                                                },
                                                 "four": {
                                                     "label": "very_good"
                                                 },
                                                 "two": {
                                                     "label": "good"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "very_good"
                                                 }
                                             }
+                                        },
+                                        "small": {
+                                            "label": "good"
                                         },
                                         "large": {
                                             "label": "very_good"
@@ -1132,27 +1178,27 @@
                                         "large": {
                                             "label": "very_good"
                                         },
-                                        "small": {
-                                            "label": "acceptable"
-                                        },
                                         "medium": {
                                             "feature": "number_doors",
                                             "children": {
-                                                "four": {
-                                                    "label": "very_good"
-                                                },
                                                 "two": {
                                                     "label": "acceptable"
                                                 },
+                                                "four": {
+                                                    "label": "very_good"
+                                                },
                                                 "three": {
                                                     "label": "acceptable"
-                                                },
-                                                "5_or_more": {
-                                                    "label": "very_good"
                                                 }
                                             }
+                                        },
+                                        "small": {
+                                            "label": "acceptable"
                                         }
                                     }
+                                },
+                                "very_high": {
+                                    "label": "acceptable"
                                 },
                                 "high": {
                                     "label": "acceptable"
@@ -1162,14 +1208,14 @@
                         "very_high": {
                             "feature": "maintenance_price",
                             "children": {
+                                "high": {
+                                    "label": "unacceptable"
+                                },
                                 "medium": {
                                     "label": "acceptable"
                                 },
                                 "low": {
                                     "label": "acceptable"
-                                },
-                                "high": {
-                                    "label": "unacceptable"
                                 },
                                 "very_high": {
                                     "label": "unacceptable"
@@ -1185,11 +1231,11 @@
                                 "medium": {
                                     "label": "acceptable"
                                 },
-                                "high": {
-                                    "label": "acceptable"
-                                },
                                 "very_high": {
                                     "label": "unacceptable"
+                                },
+                                "high": {
+                                    "label": "acceptable"
                                 }
                             }
                         }
@@ -1199,9 +1245,6 @@
                     "label": "unacceptable"
                 }
             }
-        },
-        "low": {
-            "label": "unacceptable"
         }
     }
 }

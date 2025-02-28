@@ -1,0 +1,271 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "sklearn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sklearn",
+        "description": "sklearn",
+        "detail": "sklearn",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "train_test_split",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "attribute_class",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def attribute_class(data):\n    # separate attributes and class\n    attribute_data=data.iloc[:,:-1]\n    class_data=data.iloc[:, -1]\n    return attribute_data, class_data\ndef normalization_forumla(data):\n    data_numpy=data.to_numpy()\n    normalized_numpy = (data_numpy - np.min(data_numpy, axis=0)) / (np.max(data_numpy, axis=0) - np.min(data_numpy, axis=0))\n    # change normalized data to pandas dataframe\n    normalized_data = pd.DataFrame(normalized_numpy, columns=data.columns)",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "normalization_forumla",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def normalization_forumla(data):\n    data_numpy=data.to_numpy()\n    normalized_numpy = (data_numpy - np.min(data_numpy, axis=0)) / (np.max(data_numpy, axis=0) - np.min(data_numpy, axis=0))\n    # change normalized data to pandas dataframe\n    normalized_data = pd.DataFrame(normalized_numpy, columns=data.columns)\n    return normalized_data\n# Prepared train_data, test_data\ndef process_dataset():\n    # read CSV file\n    wdbc_file = pd.read_csv('wdbc.csv', header=None)",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "process_dataset",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def process_dataset():\n    # read CSV file\n    wdbc_file = pd.read_csv('wdbc.csv', header=None)\n    # shuffle the DataFrame\n    shuffled_data = sk.utils.shuffle(wdbc_file)\n    # split data with training and testing\n    train_data, test_data= sk.model_selection.train_test_split(shuffled_data, test_size=0.2)\n    # reset index both train_data and test_data\n    train_data=train_data.reset_index(drop=True)\n    test_data=test_data.reset_index(drop=True)",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "euclidean_formula",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def euclidean_formula(vector1,vector2):\n    # follow eucliean distance formula\n    euclidean_distance = np.sqrt(np.sum((vector1-vector2)**2))\n    return euclidean_distance\n# Calculate Euclidean Distane in train_data\ndef euclidean_matrix(train_data, test_data, data_info):\n    # Initialize an empty NumPy array (rows = train_data, columns = test_data)\n    euclidean_table = np.zeros((len(train_data), len(test_data)))\n    # Compute distances row-wise (train_data as rows, test_data as columns)\n    for train_idx in range(len(train_data)):",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "euclidean_matrix",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def euclidean_matrix(train_data, test_data, data_info):\n    # Initialize an empty NumPy array (rows = train_data, columns = test_data)\n    euclidean_table = np.zeros((len(train_data), len(test_data)))\n    # Compute distances row-wise (train_data as rows, test_data as columns)\n    for train_idx in range(len(train_data)):\n        for test_idx in range(len(test_data)):\n            euclidean_table[train_idx, test_idx] = euclidean_formula(\n                train_data.iloc[train_idx], test_data.iloc[test_idx]\n            )\n    # Convert the NumPy array to a DataFrame (train_data as index, test_data as columns)",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "cutoff_k",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def cutoff_k(test_column,k_num):\n    # sort by smallest and cutoff k amount\n    smallest_column=test_column.sort_values(ascending=True)[:k_num]\n    # find index of smallest_column\n    smallest_indices=smallest_column.index.str.split('_').str[1].astype(int)\n    return smallest_indices\n# check majority\ndef majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  ",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "majority_formula",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def majority_formula(list):\n    # count 1 or 0, if there is nothing value is 0\n    count_1 = list.value_counts().get(1, 0)  \n    count_0 = list.value_counts().get(0, 0) \n    # betwen 1 and 0 which one is more\n    if count_1 > count_0:\n        return 1\n    else:\n        return 0\n# Accuracy in Training and Testing",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_accuracy",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def calculate_accuracy(actual_series, predicted_seires):\n    if (len(actual_series))==len((predicted_seires)):\n        # transform series to list\n        actual_list=np.array(actual_series.tolist())\n        # transform series to list & change datatype integer\n        predicted_list=np.array(predicted_seires, dtype=int)\n        # compare two column. matched->1, mismatched->0\n        match_count=np.sum(actual_list==predicted_list)\n        # calculate accuracy\n        accuracy_value=match_count/len(actual_list)",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "knn_algorithm",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def knn_algorithm(k, test_euclidean, predicted_class, actual_class, data_info, try_count, accuracy_table):\n    predicted_table=pd.DataFrame()\n    # Iterate over k values : 1~51 odd number\n    for k_num in range(1,k+1,2): \n        # j is for data instances \n        for test_num in range(len(test_euclidean.columns)):\n            # cutoff k amount and get indices\n            cutoff_indcies=cutoff_k(test_euclidean[\"Test_\"+str(test_num)],k_num)\n            # get predicted list \n            predicted_list=predicted_class.iloc[cutoff_indcies]",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "accuracy_avg_std",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def accuracy_avg_std(accuracy_table, data_info):\n    # add mean and std bottom of the each column (same k, different try)\n    meanstd = accuracy_table.agg(['mean', 'std'])\n    # merge accuracy_table with meanstd table \n    graph_table=pd.concat([accuracy_table,meanstd])\n    # message\n    print(\"\\n--> Calcuate mean and standard deviation of each k value : \"+str(data_info)+\"...\")\n    return graph_table\n# Graph created with k\ndef draw_graph(accuracy_table, title):",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "draw_graph",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def draw_graph(accuracy_table, title):\n    # Extract integer k values from the column names using regex\n    k_values = []\n    for col in accuracy_table.columns:\n        match = re.search(r'\\(k=(\\d+)\\)', col)\n        if match:\n            k_values.append(int(match.group(1)))\n        else:\n            k_values.append(col)  # if the pattern is not found, keep the original name\n    # Get mean and std rows from the DataFrame",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "question1.Q1",
+        "description": "question1.Q1",
+        "peekOfCode": "def main():\n    train_accuracy=pd.DataFrame()\n    test_accuracy=pd.DataFrame()\n    # iterate try = 1 ~ 20 \n    for try_count in range(1,21):\n        # message\n        print(\"\\n================================================================================\")\n        print(f\"[[ try = {try_count} ]]\")\n        # preprocess dataset\n        train_attribute, train_class, test_attribute, test_class=process_dataset()",
+        "detail": "question1.Q1",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "kind": 6,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "class Node:\n    def __init__(self, feature=None, label=None, children=None):\n        self.feature = feature\n        self.label = label\n        self.children = children if children else {}\n# Build decision tree function\ndef build_tree(X, y, features):\n    if len(y.unique()) == 1:\n        return Node(label=y.iloc[0])\n    if len(features) == 0:",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "entropy",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def entropy(y):\n    class_counts = y.value_counts()\n    probabilities = class_counts / len(y)\n    return -np.sum(probabilities * np.log2(probabilities))\n# Information gain calculation function\ndef information_gain(X, y, feature):\n    total_entropy = entropy(y)\n    values = X[feature].unique()\n    weighted_entropy = sum((len(y[X[feature] == value]) / len(y)) * entropy(y[X[feature] == value]) for value in values)\n    return total_entropy - weighted_entropy",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "information_gain",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def information_gain(X, y, feature):\n    total_entropy = entropy(y)\n    values = X[feature].unique()\n    weighted_entropy = sum((len(y[X[feature] == value]) / len(y)) * entropy(y[X[feature] == value]) for value in values)\n    return total_entropy - weighted_entropy\n# Decision tree node class\nclass Node:\n    def __init__(self, feature=None, label=None, children=None):\n        self.feature = feature\n        self.label = label",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "build_tree",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def build_tree(X, y, features):\n    if len(y.unique()) == 1:\n        return Node(label=y.iloc[0])\n    if len(features) == 0:\n        return Node(label=y.mode()[0])\n    best_feature = max(features, key=lambda f: information_gain(X, y, f))\n    tree = Node(feature=best_feature)\n    remaining_features = [f for f in features if f != best_feature]\n    for value in X[best_feature].unique():\n        subset_X = X[X[best_feature] == value].drop(columns=[best_feature])",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "tree_to_dict",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def tree_to_dict(tree):\n    if tree.label is not None:\n        return {'label': tree.label}\n    return {\n        'feature': tree.feature,\n        'children': {str(value): tree_to_dict(child) for value, child in tree.children.items()}\n    }\n# Predict function\ndef predict(tree, X):\n    predictions = []",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "predict",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def predict(tree, X):\n    predictions = []\n    for _, row in X.iterrows():\n        node = tree\n        while node.label is None:\n            if row[node.feature] not in node.children:\n                predictions.append(None)\n                break\n            node = node.children[row[node.feature]]\n        else:",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "evaluate",
+        "kind": 2,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "def evaluate(X, y, test_size=0.2, num_trials=100):\n    train_accuracies = []\n    test_accuracies = []\n    for trial in range(1, num_trials + 1):\n        print(f\"Running trial {trial}...\")\n        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=None)\n        tree = build_tree(X_train, y_train, X.columns)\n        train_predictions = predict(tree, X_train)\n        test_predictions = predict(tree, X_test)\n        train_acc = np.mean(train_predictions == y_train)",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "data",
+        "kind": 5,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "data = pd.read_csv('car.csv')\ndf = pd.DataFrame(data)\nX = df.drop(columns=['class'])\ny = df['class']\n# Run evaluation\ntrain_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)\n# Plot histograms\nplt.figure(figsize=(12, 5))\nplt.subplot(1, 2, 1)\nplt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "df = pd.DataFrame(data)\nX = df.drop(columns=['class'])\ny = df['class']\n# Run evaluation\ntrain_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)\n# Plot histograms\nplt.figure(figsize=(12, 5))\nplt.subplot(1, 2, 1)\nplt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)\nplt.xlabel('Training Accuracy')",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "X",
+        "kind": 5,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "X = df.drop(columns=['class'])\ny = df['class']\n# Run evaluation\ntrain_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)\n# Plot histograms\nplt.figure(figsize=(12, 5))\nplt.subplot(1, 2, 1)\nplt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)\nplt.xlabel('Training Accuracy')\nplt.ylabel('Frequency')",
+        "detail": "question2.Q2",
+        "documentation": {}
+    },
+    {
+        "label": "y",
+        "kind": 5,
+        "importPath": "question2.Q2",
+        "description": "question2.Q2",
+        "peekOfCode": "y = df['class']\n# Run evaluation\ntrain_acc, test_acc = evaluate(X, y, test_size=0.2, num_trials=100)\n# Plot histograms\nplt.figure(figsize=(12, 5))\nplt.subplot(1, 2, 1)\nplt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)\nplt.xlabel('Training Accuracy')\nplt.ylabel('Frequency')\nplt.title('Training Accuracy Distribution')",
+        "detail": "question2.Q2",
+        "documentation": {}
+    }
+]
