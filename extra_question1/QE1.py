@@ -5,20 +5,20 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle  # shuffle 추가
 
-# Entropy calculation function
-def entropy(y):
+# Gini impurity calculation function
+def gini_impurity(y):
     class_counts = y.value_counts()
     probabilities = class_counts / len(y)
-    return -np.sum(probabilities * np.log2(probabilities))
+    return 1 - np.sum(probabilities ** 2)
 
-# Information gain calculation function
-def information_gain(X, y, feature):
-    total_entropy = entropy(y)
+# Gini impurity reduction calculation function (Information Gain → Gini Reduction)
+def gini_reduction(X, y, feature):
+    total_gini = gini_impurity(y)
     values = X[feature].unique()
-    weighted_entropy = sum(
-        (len(y[X[feature] == value]) / len(y)) * entropy(y[X[feature] == value]) for value in values
+    weighted_gini = sum(
+        (len(y[X[feature] == value]) / len(y)) * gini_impurity(y[X[feature] == value]) for value in values
     )
-    return total_entropy - weighted_entropy
+    return total_gini - weighted_gini
 
 # Decision tree node class
 class Node:
@@ -34,7 +34,8 @@ def build_tree(X, y, features):
     if len(features) == 0:
         return Node(label=y.mode()[0])
 
-    best_feature = max(features, key=lambda f: information_gain(X, y, f))
+    # Choose the best feature based on Gini Reduction
+    best_feature = max(features, key=lambda f: gini_reduction(X, y, f))
     tree = Node(feature=best_feature)
     remaining_features = [f for f in features if f != best_feature]
 
@@ -124,16 +125,15 @@ plt.figure(figsize=(6, 4))
 plt.hist(train_acc, bins=10, edgecolor='black', alpha=0.7)
 plt.xlabel('Training Accuracy')
 plt.ylabel('Accuracy Frequency on Training Data')
-plt.title("[Figure 5]")
+plt.title("[Figure 7]")
 plt.savefig('train_accuracy.png', dpi=300, bbox_inches='tight')
 
 plt.figure(figsize=(6, 4))
 plt.hist(test_acc, bins=10, edgecolor='black', alpha=0.7)
 plt.xlabel('Testing Accuracy')
 plt.ylabel('Accuracy Frequency on Testing Data')
-plt.title("[Figure 6]")
+plt.title("[Figure 8]")
 plt.savefig('test_accuracy.png', dpi=300, bbox_inches='tight')
-
 
 # Print mean and standard deviation
 print(f"Training Accuracy => Mean: {np.mean(train_acc):.4f} / Std: {np.std(train_acc):.4f}")

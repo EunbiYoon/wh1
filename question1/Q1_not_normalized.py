@@ -11,12 +11,12 @@ def attribute_class(data):
     class_data=data.iloc[:, -1]
     return attribute_data, class_data
 
-def normalization_forumla(data):
-    data_numpy=data.to_numpy()
-    normalized_numpy = (data_numpy - np.min(data_numpy, axis=0)) / (np.max(data_numpy, axis=0) - np.min(data_numpy, axis=0))
-    # change normalized data to pandas dataframe
-    normalized_data = pd.DataFrame(normalized_numpy, columns=data.columns)
-    return normalized_data
+# def normalization_forumla(data):
+#     data_numpy=data.to_numpy()
+#     normalized_numpy = (data_numpy - np.min(data_numpy, axis=0)) / (np.max(data_numpy, axis=0) - np.min(data_numpy, axis=0))
+#     # change normalized data to pandas dataframe
+#     normalized_data = pd.DataFrame(normalized_numpy, columns=data.columns)
+#     return normalized_data
     
 # Prepared train_data, test_data
 def process_dataset():
@@ -43,16 +43,16 @@ def process_dataset():
     # message
     print("--> Separated attribute and class in each test_data and train_data...")
 
-    # normalize only attribute
-    train_attribute_normalized=normalization_forumla(train_attribute)
-    test_attribute_normalized=normalization_forumla(test_attribute)
-    train_attribute_normalized.to_excel('train_attribute_normalized.xlsx')
-    test_attribute_normalized.to_excel('test_attribute_normalized.xlsx')
-    # message
-    print("--> Normalized attributes_data in both test_data and train_data...")
+    # # normalize only attribute
+    # train_attribute_normalized=normalization_forumla(train_attribute)
+    # test_attribute_normalized=normalization_forumla(test_attribute)
+    # train_attribute_normalized.to_excel('train_attribute_normalized.xlsx')
+    # test_attribute_normalized.to_excel('test_attribute_normalized.xlsx')
+    # # message
+    # print("--> Normalized attributes_data in both test_data and train_data...")
 
     # return final train_data, test_data
-    return train_attribute_normalized, train_class, test_attribute_normalized, test_class
+    return train_attribute, train_class, test_attribute, test_class
 
 # caculate Euclidean Distance
 def euclidean_formula(vector1,vector2):
@@ -196,9 +196,9 @@ def draw_graph(accuracy_table, title):
     plt.xlabel("(Value of k)")
     plt.ylabel("(Accuracy over "+title+" data")
     if title=="training":
-        plt.title("[Figure 1]")
+        plt.title("[Figure 3]")
     if title=="testing":
-        plt.title("[Figure 2]")
+        plt.title("[Figure 4]")
     plt.savefig(title+".png",dpi=300, bbox_inches='tight')
 
     # message
